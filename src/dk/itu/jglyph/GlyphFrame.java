@@ -1,6 +1,7 @@
 package dk.itu.jglyph;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,12 +20,27 @@ public class GlyphFrame extends JFrame
 	private static final long serialVersionUID = -3005890889450279723L;
 	
 	private final static String FRAME_TITLE = "JGlyph";
+	private final static int MIN_WIDTH = 320;
+	private final static int MIN_HEIGHT = 380;
 	
 	public GlyphFrame()
 	{
-		init();
+		setLayout(new BorderLayout());
+		
+		initGlyph(BorderLayout.CENTER);
+		initButtons(BorderLayout.SOUTH);
+		
+		setTitle(FRAME_TITLE);
+		
+		setSize(MIN_WIDTH, MIN_HEIGHT);
+		
+		Dimension minimumSize = new Dimension(MIN_WIDTH, MIN_HEIGHT);
+		setMinimumSize(minimumSize);
+		
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
+
 	private void initGlyph(Object constraints)
 	{
 		final GlyphPanel glyphPanel = new GlyphPanel();
@@ -68,25 +84,11 @@ public class GlyphFrame extends JFrame
 		add(buttonPanel, constraints);
 	}
 	
-	public void init()
-	{
-		setLayout(new BorderLayout());
-		
-		initGlyph(BorderLayout.CENTER);
-		initButtons(BorderLayout.SOUTH);
-		
-		setTitle(FRAME_TITLE);
-		
-		setSize(512, 512);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-	
 	public static void main(String[] args)
 	{
 		try {
 			String laf = UIManager.getSystemLookAndFeelClassName();
-			laf = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
+//			laf = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
 			System.out.println(laf);
 			UIManager.setLookAndFeel(laf);
 
