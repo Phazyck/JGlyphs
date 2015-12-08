@@ -23,4 +23,33 @@ public class FeatureExtractor
   }
   
   // TODO - MOAR METHODS
+  
+  /*
+   * Features
+   * 
+- Minimum Angle
+- Maximum Angle
+- Average Angle
+
+- Minimum distance from center for stroke start/end
+- Maximum distance from center for stroke start/end
+- Average distance from center for stroke start/end
+
+- Number of edges
+
+- Number of connected units
+
+- Number of strokes
+
+- Average X for all edges
+- Average Y for all edges
+
+- Average X for stroke start/end
+- Average Y for stroke start/end
+
+- Minimum edge length
+- Maximum edge legnth
+- Average edge length
+
+   */
 }
