@@ -13,10 +13,16 @@ import javax.swing.border.Border;
 
 public class GlyphPanel  extends JComponent
 {
+	
+	/**
+	 * Auto-generated serial version UID. 
+	 */
+	private static final long serialVersionUID = 6967190278448536610L;
+	
 	private final static int DEFAULT_PADDING = 8;
 	private final static String DEFAULT_TITLE = null;
 	
-	private JGlyph glyph = new JGlyph(3, 3);
+	private JGlyph glyph = new JGlyph(8, 5);
 	
 	public GlyphPanel()
 	{
@@ -98,7 +104,7 @@ public class GlyphPanel  extends JComponent
 			
 			if(n1 == n2)
 			{
-				int r = 4;
+				int r = 3;
 				int d = r * 2;
 				g2.drawOval(x1 - r, y1 - r, d, d);
 			}
@@ -141,7 +147,7 @@ public class GlyphPanel  extends JComponent
         
         Stroke stroke = g2.getStroke();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setStroke(new BasicStroke(4));
+        g2.setStroke(new BasicStroke(3));
         draw(g2);
         g2.setStroke(stroke);
 	}

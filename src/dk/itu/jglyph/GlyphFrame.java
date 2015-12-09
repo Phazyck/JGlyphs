@@ -1,7 +1,6 @@
 package dk.itu.jglyph;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -17,7 +16,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class GlyphFrame extends JFrame 
 {
 	/**
-	 * Auto-Generated serial version.s 
+	 * Auto-generated serial version UID. 
 	 */
 	private static final long serialVersionUID = -3005890889450279723L;
 	
