@@ -4,52 +4,128 @@ public class FeatureExtractor
 {
   private FeatureExtractor() {}
 
-  public static double getMinimumAngle(Graph graph)
+  public static double minimumAngle(Graph graph)
   {
+	  // Søren
 	  // TODO - Implement this method.
 	  throw new RuntimeException("Method not implement.");
   }
   
-  public static double getAverageAngle(Graph graph)
+  public static double avgAngle(Graph graph)
   {
+	  // Søren
 	  // TODO - Implement this method.
 	  throw new RuntimeException("Method not implement.");
   }
   
-  public static double getMaximumAngle(Graph graph) 
+  public static double maxAngle(Graph graph) 
   {
+	  // Søren
 	  // TODO - Implement this method.
 	  throw new RuntimeException("Method not implement.");
   }
   
-  // TODO - MOAR METHODS
-  
-  /*
-   * Features
-   * 
-- Minimum Angle
-- Maximum Angle
-- Average Angle
+  /** Minimum distance from center for stroke start/end */
+  public static double minDistanceToCenter(Graph graph) 
+  {
+	  // Oliver
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
 
-- Minimum distance from center for stroke start/end
-- Maximum distance from center for stroke start/end
-- Average distance from center for stroke start/end
+  /** Average distance from center for stroke start/end */
+  public static double avgDistanceToCenter(Graph graph) 
+  {
+	  // Oliver
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
 
-- Number of edges
+  /** Maximum distance from center for stroke start/end */
+  public static double maxDistanceToCenter(Graph graph) 
+  {
+	  // Oliver
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
 
-- Number of connected units
+  /** Number of edges */
+  public static double edgeCount(Graph graph) 
+  {
+	  // Søren
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
 
-- Number of strokes
+  /** Number of connected units */
+  public static double unitCount(Graph graph) 
+  {
+	  // Søren
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
 
-- Average X for all edges
-- Average Y for all edges
+  /** An estimat for how many strokes would be needed to draw this */
+  public static double strokeEstimat(Graph graph) 
+  {
+	  // Oliver
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
 
-- Average X for stroke start/end
-- Average Y for stroke start/end
+  /** Average X for all edges */
+  public static double avgX(Graph graph) 
+  {
+	  // Søren
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
 
-- Minimum edge length
-- Maximum edge legnth
-- Average edge length
+  /** Average Y for all edges */
+  public static double avgY(Graph graph) 
+  {
+	  // Søren
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
 
-   */
+  /** Average X for stroke start/end */
+  public static double avgStrokeStartX(Graph graph) 
+  {
+	  // Oliver
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
+
+  /** Average Y for stroke start/end */
+  public static double avgStrokeStartY(Graph graph) 
+  {
+	  // Oliver
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
+
+  /** Minimum edge length */
+  public static double minEdgeLength(Graph graph) 
+  {
+	  // Søren
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
+
+  /** Maximum edge length */
+  public static double maxEdgeLength(Graph graph) 
+  {
+	  // Søren
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
+
+  /** Average edge length */
+  public static double avgEdgeLength(Graph graph) 
+  {
+	  // Søren
+	  // TODO - Implement this method.
+	  throw new RuntimeException("Method not implement.");
+  }
 }
