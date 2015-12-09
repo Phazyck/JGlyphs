@@ -74,4 +74,11 @@ public class JGlyph implements Graph
 			}
 		}
 	}
+	
+	public void mutate()
+	{
+		int nodeIdA = RNG.nextInt(nodes.length);
+		int nodeIdB = RNG.nextInt(nodes.length);
+		adjMatrix[nodeIdA][nodeIdB] = adjMatrix[nodeIdB][nodeIdA] = !adjMatrix[nodeIdA][nodeIdB];
+	}
 }

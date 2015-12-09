@@ -138,4 +138,10 @@ public class GlyphPanel  extends JComponent
 		glyph.randomizeEdges();
 		repaint();
 	}
+	
+	public void mutateGlyph()
+	{
+		glyph.mutate();
+		repaint();
+	}
 }

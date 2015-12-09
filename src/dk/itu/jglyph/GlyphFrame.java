@@ -1,6 +1,8 @@
 package dk.itu.jglyph;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,14 +56,13 @@ public class GlyphFrame extends JFrame
 	{
 		JPanel buttonPanel = new JPanel();
 		
-		JButton buttonRandomize = makeRandomizerButton();
-		
-		buttonPanel.add(buttonRandomize);
+		addRandomizerButton(buttonPanel);
+		addMutatorButton(buttonPanel);
 		
 		add(buttonPanel, constraints);
 	}
 	
-	private JButton makeRandomizerButton()
+	private void addRandomizerButton(Container container)
 	{
 		JButton buttonRandomize = new JButton("RANDOMIZE");
 		
@@ -73,7 +74,22 @@ public class GlyphFrame extends JFrame
 			}
 		});
 		
-		return(buttonRandomize);
+		container.add(buttonRandomize);
+	}
+	
+	private void addMutatorButton(Container container)
+	{
+		JButton buttonMutate = new JButton("MUTATE");
+		
+		buttonMutate.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Mutating.");
+				glyphPanel.mutateGlyph();
+			}
+		});
+		
+		container.add(buttonMutate);
 	}
 	
 	public static void main(String[] args)
