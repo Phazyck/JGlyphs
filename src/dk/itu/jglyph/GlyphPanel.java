@@ -59,8 +59,8 @@ public class GlyphPanel  extends JComponent
 		
 		for(Node node : glyph.getNodes())
 		{
-			int x = node.x;
-			int y = node.y;
+			double x = node.x;
+			double y = node.y;
 			
 			if(x < minX) minX = x;
 			if(x > maxX) maxX = x;

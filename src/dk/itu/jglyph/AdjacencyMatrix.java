@@ -17,7 +17,6 @@ public class AdjacencyMatrix
 		}
 	}
 	
-	
 	public boolean getValue(int row, int col)
 	{
 		boolean element;

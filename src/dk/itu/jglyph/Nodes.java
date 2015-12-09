@@ -10,11 +10,26 @@ public class Nodes implements Iterable<Node>
 	
 	public final int length;
 	
+	public final Node centroid;
+	
 	public Nodes(Node[] nodes)
 	{
 		this.nodes = nodes;
-		
 		this.length = nodes.length;
+		
+		double sumX = 0;
+		double sumY = 0;
+		
+		for(Node node : nodes)
+		{
+			sumX += node.x;
+			sumY += node.y;
+		}
+		
+		double avgX = sumX / length;
+		double avgY = sumY / length;
+		
+		centroid = new Node(avgX, avgY);
 		
 		edges = new Edge[length][length];
 	}

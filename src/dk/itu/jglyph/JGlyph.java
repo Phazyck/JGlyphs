@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class JGlyph implements Graph
+public class JGlyph implements Graph<Node>
 {
 	private final static Random RNG = new Random();
 	
@@ -109,5 +109,50 @@ public class JGlyph implements Graph
 		int nodeIdxB = RNG.nextInt(length);
 		boolean value = adjMatrix.getValue(nodeIdxA, nodeIdxB);
 		adjMatrix.setValue(nodeIdxA, nodeIdxB, !value);
+	}
+	
+	public int getDegree(int nodeIdx)
+	{
+		int degree = 0;
+		for(int idx = 0; idx < nodes.length; ++idx)
+		{
+			boolean adjacent = adjMatrix.getValue(nodeIdx, idx);
+			if(adjacent)
+			{
+				++degree;
+			}
+		}
+		
+		return(degree);
+	}
+	
+	public boolean isEndOfStroke(int nodeIdx)
+	{
+		int degree = getDegree(nodeIdx);
+		boolean result = degree % 2 != 0;
+		return(result);
+	}
+	
+	public List<Node> getEndsOfStrokes()
+	{
+		List<Node> ends = new ArrayList<Node>();
+		
+		for(int idx = 0; idx < nodes.length; ++idx)
+		{
+			if(!isEndOfStroke(idx))
+			{
+				continue;
+			}
+			
+			Node end = nodes.getNode(idx);
+			ends.add(end);
+		}
+		
+		return(ends);
+	}
+	
+	public Node getCentroid()
+	{
+		return nodes.centroid;
 	}
 }

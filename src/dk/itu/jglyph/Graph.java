@@ -1,6 +1,6 @@
 package dk.itu.jglyph;
 
-public interface Graph {
+public interface Graph<T> {
 	/** Get all lines to/from a specific node.*/
 	public Iterable<Edge> getEdges(int nodeIndex);
 
@@ -8,7 +8,7 @@ public interface Graph {
 	public Iterable<Edge> getEdges();
 
 	/** Get all nodes in the graph. */  
-	public Iterable<Node> getNodes();
+	public Iterable<T> getNodes();
 
 	/** 
 	 * Get a node index of a given coordinate.
