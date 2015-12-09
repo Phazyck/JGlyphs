@@ -96,19 +96,25 @@ public class GlyphPanel  extends JComponent
 			int x2 = (int)(x0 + n2.x * s);
 			int y2 = (int)(y0 + n2.y * s);
 			
+			if(n1 == n2)
+			{
+				int r = 4;
+				int d = r * 2;
+				g2.drawOval(x1 - r, y1 - r, d, d);
+			}
+			
 			g2.drawLine(x1, y1, x2, y2);
 		}
 		
-		for(Node node : glyph.getNodes())
-		{
-			int x = (int)(x0 + node.x * s);
-			int y = (int)(y0 + node.y * s);
-			
-			int r = 2;
-			int d = r * 2;
-			g2.drawOval(x - r, y - r, d, d);
-			
-		}
+//		for(Node node : glyph.getNodes())
+//		{
+//			int x = (int)(x0 + node.x * s);
+//			int y = (int)(y0 + node.y * s);
+//			
+//			int r = 2;
+//			int d = r * 2;
+//			g2.drawOval(x - r, y - r, d, d);
+//		}
 		
 //		g2.drawRect(xMin, yMin, xMax, yMax);
       
