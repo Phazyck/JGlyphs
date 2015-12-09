@@ -1,8 +1,11 @@
 package dk.itu.jglyph;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Stroke;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -101,7 +104,7 @@ public class GlyphPanel  extends JComponent
 			int x = (int)(x0 + node.x * s);
 			int y = (int)(y0 + node.y * s);
 			
-			int r = 4;
+			int r = 2;
 			int d = r * 2;
 			g2.drawOval(x - r, y - r, d, d);
 			
@@ -120,7 +123,7 @@ public class GlyphPanel  extends JComponent
 
 		 //create a new graphics2D instance
         Graphics2D g2 = (Graphics2D) graphics.create();
-                   
+        
         //determine the x, y, width and height
         xMin = getInsets().left;
         yMin = getInsets().top;
@@ -130,7 +133,11 @@ public class GlyphPanel  extends JComponent
         //draws the blue circle
         g2.setPaint(Color.BLACK);
         
+        Stroke stroke = g2.getStroke();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setStroke(new BasicStroke(4));
         draw(g2);
+        g2.setStroke(stroke);
 	}
 	
 	public void randomizeGlyph()
