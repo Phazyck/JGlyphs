@@ -1,4 +1,4 @@
-package dk.itu.jglyph;
+package dk.itu.jglyph.swing;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -10,6 +10,10 @@ import java.awt.Stroke;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
+
+import dk.itu.jglyph.Edge;
+import dk.itu.jglyph.JGlyph;
+import dk.itu.jglyph.Node;
 
 public class GlyphPanel  extends JComponent
 {

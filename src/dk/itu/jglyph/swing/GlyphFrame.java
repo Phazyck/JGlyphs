@@ -1,4 +1,4 @@
-package dk.itu.jglyph;
+package dk.itu.jglyph.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
