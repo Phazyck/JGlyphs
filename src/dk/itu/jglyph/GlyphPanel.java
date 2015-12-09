@@ -22,7 +22,7 @@ public class GlyphPanel  extends JComponent
 	private final static int DEFAULT_PADDING = 8;
 	private final static String DEFAULT_TITLE = null;
 	
-	private JGlyph glyph = new JGlyph(8, 5);
+	private JGlyph glyph = new JGlyph(3, 3);
 	
 	public GlyphPanel()
 	{
@@ -95,8 +95,8 @@ public class GlyphPanel  extends JComponent
 		
 		for(Edge edge : glyph.getEdges())
 		{
-			Node n1 = edge.n1;
-			Node n2 = edge.n2;
+			Node n1 = edge.from;
+			Node n2 = edge.to;
 			int x1 = (int)(x0 + n1.x * s);
 			int y1 = (int)(y0 + n1.y * s);
 			int x2 = (int)(x0 + n2.x * s);

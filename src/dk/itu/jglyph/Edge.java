@@ -2,12 +2,12 @@ package dk.itu.jglyph;
 
 public class Edge 
 {
-	public final Node n1;
-	public final Node n2;
+	public final Node from;
+	public final Node to;
 	
-	public Edge(Node n1, Node n2) {
+	public Edge(Node from, Node to) {
 		super();
-		this.n1 = n1;
-		this.n2 = n2;
+		this.from = from;
+		this.to = to;
 	}
 }

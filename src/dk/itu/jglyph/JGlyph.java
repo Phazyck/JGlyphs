@@ -1,7 +1,6 @@
 package dk.itu.jglyph;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -9,26 +8,37 @@ public class JGlyph implements Graph
 {
 	private final static Random RNG = new Random();
 	
-	private Node[] nodes;
-	private boolean[][] adjMatrix;
+	private Nodes nodes;
+	private AdjacencyMatrix adjMatrix;
 
-	/** Constructs a Glyph with width*height nodes. */
+	/** Constructs a Glyph with 'width * height' nodes. */
 	public JGlyph(int width, int height) 
 	{
-		nodes = new Node[width*height];
-		for (int i = 0; i < nodes.length; i++) {
-			nodes[i] = new Node(i%width, i/width);
+		int size = width * height;
+		
+		Node[] nodeArr = new Node[size];
+		for (int idx = 0; idx < size; ++idx) 
+		{
+			nodeArr[idx] = new Node(idx % width, idx / width);
 		}
-		adjMatrix = new boolean[width*height][width*height];
+		
+		nodes = new Nodes(nodeArr);
+		
+		adjMatrix = new AdjacencyMatrix(size);
 	}
 
 	@Override
-	public Iterable<Edge> getEdges(int nodeIndex) {
+	public Iterable<Edge> getEdges(int nodeIdx) {
 		List<Edge> edges = new ArrayList<Edge>();
-		for (int i = 0; i < adjMatrix.length; i++) {
-			// Isn't it stupid to create new edges every time?
-			// And do we care for the order of the nodes in an edge?
-			if (adjMatrix[i][nodeIndex]) edges.add(new Edge(nodes[i], nodes[nodeIndex]));
+		for (int idx = 0; idx < adjMatrix.size; ++idx) 
+		{
+			if(!adjMatrix.getValue(nodeIdx, idx))
+			{
+				continue;
+			}
+			
+			Edge edge = nodes.getEdge(nodeIdx, idx);
+			edges.add(edge);
 		}
 		return edges;
 	}
@@ -36,49 +46,68 @@ public class JGlyph implements Graph
 	@Override
 	public Iterable<Edge> getEdges() {
 		List<Edge> edges = new ArrayList<Edge>();
-		for (int i = 0; i < adjMatrix.length; i++) {
-			for (int j = i; j < adjMatrix.length; j++) {
-				if (adjMatrix[i][j]) edges.add(new Edge(nodes[i], nodes[j]));
+		
+		int count = nodes.length;
+		
+		for (int idxA = 0; idxA < count; idxA++) 
+		{
+			for (int idxB = idxA; idxB < count; idxB++) 
+			{
+				if(!adjMatrix.getValue(idxA, idxB))
+				{
+					continue;
+				}
+				
+				Edge edge = nodes.getEdge(idxA, idxB);
+				edges.add(edge);
 			}
 		}
 		return edges;
 	}
 
 	@Override
-	public Iterable<Node> getNodes() {
-		// This is rather ineffective
-		return Arrays.asList(nodes);
+	public Iterable<Node> getNodes()
+	{
+		return(nodes);
 	}
 
 	@Override
-	public int getNodeId(int x, int y) {
+	public int getNodeId(int x, int y) 
+	{
 		return x+x*y;
 	}
 
 	@Override
-	public void makeEdge(int nodeIdA, int nodeIdB) {
-		//TODO: Code for making sure parallel overlapping edges get combined could go here
-		adjMatrix[nodeIdA][nodeIdB] = adjMatrix[nodeIdB][nodeIdA] = true;
+	public void makeEdge(int nodeIdxA, int nodeIdxB) 
+	{
+		// TODO: Code for making sure parallel overlapping edges get combined could go here
+		adjMatrix.setValue(nodeIdxA, nodeIdxB, true);
 	}
 
 	@Override
-	public void removeEdge(int nodeIdA, int nodeIdB) {
-		adjMatrix[nodeIdA][nodeIdB] = adjMatrix[nodeIdB][nodeIdA] = false;
+	public void removeEdge(int nodeIdxA, int nodeIdxB) 
+	{
+		adjMatrix.setValue(nodeIdxA, nodeIdxB, false);
 	}
 	
 	public void randomizeEdges()
 	{
-		for (int i = 0; i < nodes.length; i++) {
-			for (int j = i; j < nodes.length; j++) {
-				adjMatrix[i][j] = adjMatrix[j][i] = RNG.nextInt() % 2 == 0;
+		for (int idxA = 0; idxA < nodes.length; ++idxA) 
+		{
+			for (int idxB = idxA; idxB < nodes.length; ++idxB) 
+			{
+				boolean value = RNG.nextInt() % 2 == 0;
+				adjMatrix.setValue(idxA, idxB, value); 
 			}
 		}
 	}
 	
 	public void mutate()
 	{
-		int nodeIdA = RNG.nextInt(nodes.length);
-		int nodeIdB = RNG.nextInt(nodes.length);
-		adjMatrix[nodeIdA][nodeIdB] = adjMatrix[nodeIdB][nodeIdA] = !adjMatrix[nodeIdA][nodeIdB];
+		int length = nodes.length;
+		int nodeIdxA = RNG.nextInt(length);
+		int nodeIdxB = RNG.nextInt(length);
+		boolean value = adjMatrix.getValue(nodeIdxA, nodeIdxB);
+		adjMatrix.setValue(nodeIdxA, nodeIdxB, !value);
 	}
 }
