@@ -3,9 +3,12 @@ package dk.itu.jglyph;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class JGlyph implements Graph
 {
+	private final static Random RNG = new Random();
+	
 	private Node[] nodes;
 	private boolean[][] adjMatrix;
 
@@ -61,5 +64,14 @@ public class JGlyph implements Graph
 	@Override
 	public void removeEdge(int nodeIdA, int nodeIdB) {
 		adjMatrix[nodeIdA][nodeIdB] = adjMatrix[nodeIdB][nodeIdA] = false;
+	}
+	
+	public void randomizeEdges()
+	{
+		for (int i = 0; i < nodes.length; i++) {
+			for (int j = i; j < nodes.length; j++) {
+				adjMatrix[i][j] = adjMatrix[j][i] = RNG.nextInt() % 2 == 0;
+			}
+		}
 	}
 }
