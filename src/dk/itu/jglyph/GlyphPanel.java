@@ -13,7 +13,7 @@ public class GlyphPanel  extends JComponent
 	private final static int DEFAULT_PADDING = 8;
 	private final static String DEFAULT_TITLE = null;
 	
-	private Graph graph = new TestGlyph();
+	private JGlyph glyph = new JGlyph(3, 3);
 	
 	public GlyphPanel()
 	{
@@ -48,7 +48,7 @@ public class GlyphPanel  extends JComponent
 		double minY = Double.MAX_VALUE;
 		double maxY = Integer.MIN_VALUE;
 		
-		for(Node node : graph.getNodes())
+		for(Node node : glyph.getNodes())
 		{
 			int x = node.x;
 			int y = node.y;
@@ -84,7 +84,7 @@ public class GlyphPanel  extends JComponent
 			x0 += (w - spanX * s) * 0.5;
 		}
 		
-		for(Edge edge : graph.getEdges())
+		for(Edge edge : glyph.getEdges())
 		{
 			Node n1 = edge.n1;
 			Node n2 = edge.n2;
@@ -96,7 +96,7 @@ public class GlyphPanel  extends JComponent
 			g2.drawLine(x1, y1, x2, y2);
 		}
 		
-		for(Node node : graph.getNodes())
+		for(Node node : glyph.getNodes())
 		{
 			int x = (int)(x0 + node.x * s);
 			int y = (int)(y0 + node.y * s);
@@ -131,5 +131,11 @@ public class GlyphPanel  extends JComponent
         g2.setPaint(Color.BLACK);
         
         draw(g2);
+	}
+	
+	public void randomizeGlyph()
+	{
+		glyph.randomizeEdges();
+		repaint();
 	}
 }

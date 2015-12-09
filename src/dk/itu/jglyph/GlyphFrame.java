@@ -23,6 +23,8 @@ public class GlyphFrame extends JFrame
 	private final static int MIN_WIDTH = 320;
 	private final static int MIN_HEIGHT = 380;
 	
+	private GlyphPanel glyphPanel;
+	
 	public GlyphFrame()
 	{
 		setLayout(new BorderLayout());
@@ -43,7 +45,7 @@ public class GlyphFrame extends JFrame
 
 	private void initGlyph(Object constraints)
 	{
-		final GlyphPanel glyphPanel = new GlyphPanel();
+		glyphPanel = new GlyphPanel();
 		
 		add(glyphPanel, constraints);
 	}
@@ -52,36 +54,26 @@ public class GlyphFrame extends JFrame
 	{
 		JPanel buttonPanel = new JPanel();
 		
-		JButton button1 = new JButton("BUTTON 1");
-		JButton button2 = new JButton("BUTTON 2");
-		JButton button3 = new JButton("BUTTON 3");
+		JButton buttonRandomize = makeRandomizerButton();
 		
-		button1.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("BUTTON 1");
-			}
-		});
-		
-		button2.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("BUTTON 2");
-			}
-		});
-		
-		button3.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("BUTTON 3");
-			}
-		});
-		
-		buttonPanel.add(button1);
-		buttonPanel.add(button2);
-		buttonPanel.add(button3);
+		buttonPanel.add(buttonRandomize);
 		
 		add(buttonPanel, constraints);
+	}
+	
+	private JButton makeRandomizerButton()
+	{
+		JButton buttonRandomize = new JButton("RANDOMIZE");
+		
+		buttonRandomize.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Randomizing.");
+				glyphPanel.randomizeGlyph();
+			}
+		});
+		
+		return(buttonRandomize);
 	}
 	
 	public static void main(String[] args)
