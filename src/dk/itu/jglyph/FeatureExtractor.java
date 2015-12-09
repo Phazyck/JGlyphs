@@ -1,8 +1,6 @@
 package dk.itu.jglyph;
 
-import java.util.List;
-
-public class FeatureExtractor 
+public class FeatureExtractor
 {
   private FeatureExtractor() {}
 
@@ -26,87 +24,6 @@ public class FeatureExtractor
 	  // TODO - Implement this method.
 	  throw new RuntimeException("Method not implemented.");
   }
-  
-  /** Minimum distance from center for stroke start/end */
-  public static double minDistanceToCenter(JGlyph glyph) 
-  {
-	  List<Node> ends = glyph.getEndsOfStrokes();
-	  
-	  if(ends.isEmpty())
-	  {
-		  return(0);
-	  }
-	  
-	  Node centroid = glyph.getCentroid();
-	  
-	  double minSq = Double.MAX_VALUE;
-	  
-	  for(Node end : glyph.getEndsOfStrokes())
-	  {
-		  double distSq = end.distanceSq(centroid);
-		  if(distSq < minSq)
-		  {
-			  minSq = distSq;
-		  }
-	  }
-	  
-	  double min = Math.sqrt(minSq);
-	  
-	  return(min);
-  }
-
-  /** Average distance from center for stroke start/end */
-  public static double avgDistanceToCenter(JGlyph glyph) 
-  {
-	  List<Node> ends = glyph.getEndsOfStrokes();
-	  int count = ends.size();
-	  
-	  if(count == 0)
-	  {
-		  return(0);
-	  }
-	  
-	  Node centroid = glyph.getCentroid();
-	  
-	  double sum = 0;
-	  
-	  for(Node end : ends)
-	  {
-		  sum += end.distance(centroid);
-	  }
-	  
-	  double average = sum / count;
-	  
-	  return(average);
-  }
-
-  /** Maximum distance from center for stroke start/end */
-  public static double maxDistanceToCenter(JGlyph glyph) 
-  {
-	  List<Node> ends = glyph.getEndsOfStrokes();
-	  
-	  if(ends.isEmpty())
-	  {
-		  return(0);
-	  }
-	  
-	  Node centroid = glyph.getCentroid();
-	  
-	  double maxSq = Double.MIN_VALUE;
-	  
-	  for(Node end : glyph.getEndsOfStrokes())
-	  {
-		  double distSq = end.distanceSq(centroid);
-		  if(distSq > maxSq)
-		  {
-			  maxSq = distSq;
-		  }
-	  }
-	  
-	  double max = Math.sqrt(maxSq);
-	  
-	  return(max);
-  }
 
   /** Number of edges */
   public static double edgeCount(JGlyph glyph) 
@@ -124,17 +41,6 @@ public class FeatureExtractor
 	  throw new RuntimeException("Method not implemented.");
   }
 
-  /** An estimate for how many strokes would be needed to draw this */
-  public static double strokeEstimate(JGlyph glyph) 
-  {
-	  List<Node> ends = glyph.getEndsOfStrokes();
-	  int count = ends.size();
-	  
-	  int estimate = count / 2;
-	  
-	  return(estimate);
-  }
-
   /** Average X for all edges */
   public static double avgX(JGlyph glyph) 
   {
@@ -149,56 +55,6 @@ public class FeatureExtractor
 	  // Søren
 	  // TODO - Implement this method.
 	  throw new RuntimeException("Method not implemented.");
-  }
-
-  /** Average X for stroke ends */
-  public static double avgStrokeEndsX(JGlyph glyph) 
-  {
-	  List<Node> ends = glyph.getEndsOfStrokes();
-	  int count = ends.size();
-	  
-	  Node centroid = glyph.getCentroid();
-	  
-	  if(count == 0)
-	  {
-		  return(centroid.x);
-	  }
-	  
-	  double sum = 0;
-	  
-	  for(Node end : ends)
-	  {
-		  sum += end.x;
-	  }
-	  
-	  double average = sum / count;
-	  
-	  return(average);
-  }
-
-  /** Average Y for stroke ends */
-  public static double avgStrokeEndsY(JGlyph glyph) 
-  {
-	  List<Node> ends = glyph.getEndsOfStrokes();
-	  int count = ends.size();
-	  
-	  Node centroid = glyph.getCentroid();
-	  
-	  if(count == 0)
-	  {
-		  return(centroid.y);
-	  }
-	  
-	  double sum = 0;
-	  
-	  for(Node end : ends)
-	  {
-		  sum += end.y;
-	  }
-	  
-	  double average = sum / count;
-	  
-	  return(average);
   }
 
   /** Minimum edge length */

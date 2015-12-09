@@ -152,15 +152,34 @@ public class GlyphPanel  extends JComponent
         g2.setStroke(stroke);
 	}
 	
+	private void printFeatures()
+	{
+		System.out.println("--- FEATURES ---");
+		
+		for(dk.itu.jglyph.features.FeatureExtractor ext : dk.itu.jglyph.features.FeatureExtractor.FEATURE_EXTRACTORS)
+		{
+			String name = ext.getName();
+			double value = ext.getFeature(glyph);
+			
+			System.out.printf("%s\n\t%f\n", name, value);
+		}
+	}
+	
 	public void randomizeGlyph()
 	{
 		glyph.randomizeEdges();
+		
+		printFeatures();
+		
 		repaint();
 	}
 	
 	public void mutateGlyph()
 	{
 		glyph.mutate();
+		
+		printFeatures();
+		
 		repaint();
 	}
 }
