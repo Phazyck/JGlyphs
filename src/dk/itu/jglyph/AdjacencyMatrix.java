@@ -17,6 +17,12 @@ public class AdjacencyMatrix
 		}
 	}
 	
+	private AdjacencyMatrix(boolean[][] matrix)
+	{
+		this.size = matrix.length;
+		this.matrix = matrix;
+	}
+	
 	public boolean getValue(int row, int col)
 	{
 		boolean element;
@@ -43,5 +49,19 @@ public class AdjacencyMatrix
 		{
 			matrix[row][col-row] = value;
 		}
+	}
+	
+	public AdjacencyMatrix clone()
+	{
+		boolean[][] cloneMatrix = new boolean[size][];
+		
+		for(int i = 0; i < size; ++i)
+		{
+			cloneMatrix[i] = matrix[i].clone();
+		}
+		
+		AdjacencyMatrix clone = new AdjacencyMatrix(cloneMatrix);
+		
+		return(clone);
 	}
 }
