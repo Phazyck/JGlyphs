@@ -52,6 +52,21 @@ public class FeatureExtractors
 		return extractors.get(index);
 	}
 	
+	public double[] extractFeatures(JGlyph glyph)
+	{
+		int length = extractors.size();
+		
+		double[] features = new double[length];
+		
+		for(int i = 0; i < length; ++i)
+		{
+			IFeatureExtractor extractor = extractors.get(i);
+			features[i] = extractor.extract(glyph);
+		}
+		
+		return(features);
+	}
+	
 	public String getDescription(int index)
 	{
 		return descriptions.get(index);
