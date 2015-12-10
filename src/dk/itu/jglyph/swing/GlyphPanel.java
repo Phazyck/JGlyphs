@@ -226,7 +226,7 @@ public class GlyphPanel  extends JComponent
 		
 //		System.out.println();
 		
-		printFeatures();
+//		printFeatures();
 		repaint();
 	}
 
