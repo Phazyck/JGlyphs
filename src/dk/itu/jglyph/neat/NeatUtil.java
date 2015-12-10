@@ -15,7 +15,31 @@ public class NeatUtil {
 	// Values for loading neural networks
 	private final static String TRANSCRIBER_CLASS_KEY = "glyph.transcriber";
 	
-	public static Activator doEvolution(Properties properties) {
+	public static Activator doEvolution(List<StimulusTargetPair> trainingData, Properties properties) {
+		// set TrainingSet.stimuli/values
+		int count = trainingData.size();
+		
+		System.out.println(count);
+		
+		double[][] stimuli = new double[count][];
+		double[][] targets = new double[count][];
+		
+		for (int i = 0; i < count; i++) {
+			StimulusTargetPair stp = trainingData.get(i);
+			
+			stimuli[i] = stp.stimulus;
+			targets[i] = stp.target;
+		}
+		
+		TrainingSet.stimuli = stimuli;
+		TrainingSet.targets = targets;
+		
+		System.out.println(TrainingSet.stimuli.length);
+		System.out.println(TrainingSet.targets.length);
+		
+		
+		// Evolve new network
+		
 		Activator result = null;
 		
 		try {
@@ -33,12 +57,5 @@ public class NeatUtil {
 		}
 		
 		return result;
-	}
-
-	public static void setTrainingSetValues(List<StimulusTargetPair> trainingData) {
-		// TODO set TrainingSet.stimuli/values
-		
-//		TrainingSet.stimuli = stimuli;
-//		TrainingSet.targets = targets;
 	}
 }

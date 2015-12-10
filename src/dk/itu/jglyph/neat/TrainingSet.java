@@ -10,7 +10,6 @@ public class TrainingSet {
 	public static double[][] stimuli;
 	public static double[][] targets;
 	
-	
 	// Static class
 	private TrainingSet() {};
 
