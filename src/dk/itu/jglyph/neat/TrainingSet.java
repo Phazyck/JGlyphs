@@ -1,4 +1,4 @@
-package dk.itu.jglyph;
+package dk.itu.jglyph.neat;
 
 /**
  * Values for storing stimulus and targets,
