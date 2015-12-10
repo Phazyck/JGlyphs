@@ -10,10 +10,12 @@ public class JGlyph implements Graph<Node>
 	
 	private Nodes nodes;
 	private AdjacencyMatrix adjMatrix;
+	private int width;
 
 	/** Constructs a Glyph with 'width * height' nodes. */
 	public JGlyph(int width, int height) 
 	{
+		this.width = width;
 		int size = width * height;
 		
 		Node[] nodeArr = new Node[size];
@@ -28,7 +30,7 @@ public class JGlyph implements Graph<Node>
 	}
 
 	@Override
-	public Iterable<Edge> getEdges(int nodeIdx) {
+	public List<Edge> getEdges(int nodeIdx) {
 		List<Edge> edges = new ArrayList<Edge>();
 		for (int idx = 0; idx < adjMatrix.size; ++idx) 
 		{
@@ -74,7 +76,7 @@ public class JGlyph implements Graph<Node>
 	@Override
 	public int getNodeId(int x, int y) 
 	{
-		return x+x*y;
+		return x+width*y;
 	}
 
 	@Override
