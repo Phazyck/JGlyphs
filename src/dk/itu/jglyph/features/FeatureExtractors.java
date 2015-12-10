@@ -67,6 +67,10 @@ public class FeatureExtractors
 		return(features);
 	}
 	
+	public int totalExtractors() {
+		return extractors.size();
+	}
+	
 	public String getDescription(int index)
 	{
 		return descriptions.get(index);
