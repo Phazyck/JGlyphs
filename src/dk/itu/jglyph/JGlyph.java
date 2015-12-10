@@ -46,7 +46,7 @@ public class JGlyph implements Graph<Node>
 	}
 
 	@Override
-	public Iterable<Edge> getEdges() {
+	public List<Edge> getEdges() {
 		List<Edge> edges = new ArrayList<Edge>();
 		
 		int count = nodes.length;

@@ -14,6 +14,8 @@ import javax.swing.border.Border;
 import dk.itu.jglyph.Edge;
 import dk.itu.jglyph.JGlyph;
 import dk.itu.jglyph.Node;
+import dk.itu.jglyph.features.FeatureExtractors;
+import dk.itu.jglyph.features.IFeatureExtractor;
 
 public class GlyphPanel  extends JComponent
 {
@@ -156,15 +158,35 @@ public class GlyphPanel  extends JComponent
         g2.setStroke(stroke);
 	}
 	
+	private void printFeatures()
+	{
+		FeatureExtractors extractors = FeatureExtractors.getInstance();
+		int count = extractors.count();
+		
+		System.out.println("--- FEATURES ---");
+		
+		for(int idx = 0; idx < count; ++idx)
+		{
+			IFeatureExtractor extractor = extractors.getExtractor(idx);
+			String description = extractors.getDescription(idx);
+			double feature = extractor.extract(glyph);
+			System.out.printf("%s\n\t%f\n", description, feature);
+		}
+		
+		System.out.println("----------------");
+	}
+	
 	public void randomizeGlyph()
 	{
 		glyph.randomizeEdges();
+		printFeatures();
 		repaint();
 	}
 	
 	public void mutateGlyph()
 	{
 		glyph.mutate();
+		printFeatures();
 		repaint();
 	}
 }
