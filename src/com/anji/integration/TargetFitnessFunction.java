@@ -32,6 +32,8 @@ import com.anji.util.Configurable;
 import com.anji.util.Properties;
 import com.anji.util.Randomizer;
 
+import dk.itu.jglyph.TrainingSet;
+
 /**
  * Determines fitness based on how close <code>Activator</code> output is to a target.
  * 
@@ -87,8 +89,13 @@ public void init( Properties props ) {
 		activatorFactory = (ActivatorTranscriber) props
 				.singletonObjectProperty( ActivatorTranscriber.class );
 
-		stimuli = Properties.loadArrayFromFile( props.getResourceProperty( STIMULI_FILE_NAME_KEY ) );
-		targets = Properties.loadArrayFromFile( props.getResourceProperty( TARGETS_FILE_NAME_KEY ) );
+//		stimuli = Properties.loadArrayFromFile( props.getResourceProperty( STIMULI_FILE_NAME_KEY ) );
+//		targets = Properties.loadArrayFromFile( props.getResourceProperty( TARGETS_FILE_NAME_KEY ) );
+		
+		// Read from our exposed instead
+		stimuli = TrainingSet.stimuli;
+		targets = TrainingSet.targets;
+		
 		targetRange = props.getDoubleProperty( TARGETS_RANGE_KEY, 0.0d );
 		adjustForNetworkSizeFactor = props.getFloatProperty( ADJUST_FOR_NETWORK_SIZE_FACTOR_KEY,
 				0.0f );
