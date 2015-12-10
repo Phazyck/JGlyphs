@@ -28,6 +28,13 @@ public class JGlyph implements Graph<Node>
 		
 		adjMatrix = new AdjacencyMatrix(size);
 	}
+	
+	private JGlyph(Nodes nodes, AdjacencyMatrix adjMatrix, int width)
+	{
+		this.nodes = nodes;
+		this.adjMatrix = adjMatrix;
+		this.width = width;
+	}
 
 	@Override
 	public List<Edge> getEdges(int nodeIdx) {
@@ -156,5 +163,16 @@ public class JGlyph implements Graph<Node>
 	public Node getCentroid()
 	{
 		return nodes.centroid;
+	}
+	
+	public JGlyph clone()
+	{
+		Nodes cloneNodes = nodes;
+		AdjacencyMatrix cloneMatrix = adjMatrix.clone();
+		int cloneWidth = width;
+		
+		JGlyph clone = new JGlyph(cloneNodes, cloneMatrix, cloneWidth);
+		
+		return(clone);
 	}
 }
