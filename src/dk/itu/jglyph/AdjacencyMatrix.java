@@ -1,10 +1,37 @@
 package dk.itu.jglyph;
 
+import java.util.Arrays;
+
 public class AdjacencyMatrix 
 {
 	private final boolean[][] matrix;
 	public final int size;
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.deepHashCode(matrix);
+		result = prime * result + size;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AdjacencyMatrix other = (AdjacencyMatrix) obj;
+		if (!Arrays.deepEquals(matrix, other.matrix))
+			return false;
+		if (size != other.size)
+			return false;
+		return true;
+	}
+
 	public AdjacencyMatrix(int size)
 	{
 		this.size = size;

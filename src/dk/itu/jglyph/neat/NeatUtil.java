@@ -19,8 +19,6 @@ public class NeatUtil {
 		// set TrainingSet.stimuli/values
 		int count = trainingData.size();
 		
-		System.out.println(count);
-		
 		double[][] stimuli = new double[count][];
 		double[][] targets = new double[count][];
 		
@@ -33,10 +31,6 @@ public class NeatUtil {
 		
 		TrainingSet.stimuli = stimuli;
 		TrainingSet.targets = targets;
-		
-		System.out.println(TrainingSet.stimuli.length);
-		System.out.println(TrainingSet.targets.length);
-		
 		
 		// Evolve new network
 		

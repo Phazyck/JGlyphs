@@ -6,6 +6,31 @@ import java.util.Random;
 
 public class JGlyph implements Graph<Node>
 {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((adjMatrix == null) ? 0 : adjMatrix.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JGlyph other = (JGlyph) obj;
+		if (adjMatrix == null) {
+			if (other.adjMatrix != null)
+				return false;
+		} else if (!adjMatrix.equals(other.adjMatrix))
+			return false;
+		return true;
+	}
+
 	private final static Random RNG = new Random();
 	
 	private Nodes nodes;

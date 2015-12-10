@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.util.HashSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -20,7 +21,6 @@ import dk.itu.jglyph.features.IFeatureExtractor;
 
 public class GlyphPanel  extends JComponent
 {
-	
 	/**
 	 * Auto-generated serial version UID. 
 	 */
@@ -28,6 +28,7 @@ public class GlyphPanel  extends JComponent
 	
 	private final static int DEFAULT_PADDING = 8;
 	private final static String DEFAULT_TITLE = null;
+	private HashSet<JGlyph> visited = new HashSet<>();
 	
 	private JGlyph glyph;
 	
@@ -199,31 +200,47 @@ public class GlyphPanel  extends JComponent
 		repaint();
 	}
 	
-	private void findNewGlyph()
+	private boolean isNew(JGlyph glyph)
 	{
-		do
+		return !visited.contains(glyph);
+	}
+	
+	private boolean isPassable(JGlyph glyph)
+	{
+		return filter.doesPass(glyph);
+	}
+	
+	private void findNewGlyph()
+	{	
+		visited.add(glyph.clone());
+		
+		JGlyph backup = glyph.clone();
+		
+		while(true)
 		{
-			double fitness = filter.evaluate(glyph);
-//			System.out.println("Fitness:" + fitness);
+			boolean isNew = isNew(glyph);
 			
-			JGlyph clone;
-			double cloneFitness;
+			if(isNew)
+			{
+				break;
+			}
+			
+			int attempts = 0;
 			
 			do
 			{
-				clone = glyph.clone();
-				clone.mutate();
-				cloneFitness = filter.evaluate(clone);
+				glyph = backup.clone();
+				glyph.mutate();
 				
-//				System.out.println("Clone fit:\t" + cloneFitness);
-				
-			} while(cloneFitness < fitness);
-			
-			
-			glyph = clone;
+				if(attempts++ > 100)
+				{
+					attempts = 0;
+					backup.randomizeEdges();
+				}
+								
+			} while(!filter.doesPass(glyph));
 		}
-		while(!filter.doesPass(glyph));
-		
+				
 //		System.out.println();
 		
 //		printFeatures();

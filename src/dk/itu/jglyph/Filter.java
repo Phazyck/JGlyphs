@@ -5,21 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.SwingWorker;
+
 import com.anji.integration.Activator;
 import com.anji.util.Properties;
 
 import dk.itu.jglyph.features.FeatureExtractors;
 import dk.itu.jglyph.neat.NeatUtil;
 import dk.itu.jglyph.neat.StimulusTargetPair;
-import dk.itu.jglyph.neat.TrainingSet;
-import dk.itu.jglyph.features.FeatureExtractors;
 
 public class Filter {
 	
 	private final static String PROPERTIES_FILE_NAME = "glyph.properties";
 	private Properties properties;
-	private final static double THRESHHOLD = 0.5f;
-	
+	private double threshhold = 1f;
 	
 	// Neural Network activation object
 	private Activator currentNetwork;
@@ -63,9 +62,22 @@ public class Filter {
 	public boolean doesPass(JGlyph glyph) {
 		
 		double fitness = evaluate(glyph);
-		boolean pass = fitness >= THRESHHOLD;
+		
+		boolean pass = fitness + Double.MIN_VALUE >= threshhold;
+		
+		if(pass)
+		{
+			threshhold = 1;
+		}
+		else
+		{
+			threshhold *= 0.9;
+		}
+		
 		return(pass);
 	}
+	
+	private boolean evolving = false;
 	
 	public void update(JGlyph glyph, boolean classification) {
 		//TODO only re-evolve after X new classifications added, instead of every time
@@ -78,7 +90,28 @@ public class Filter {
 		//  add to trainingdata
 		trainingData.add(new StimulusTargetPair(stimulus, target));
 		
-		// Evolve new network
-		currentNetwork = NeatUtil.doEvolution(trainingData, properties);
+		if(!evolving)
+		{
+			evolving = true;
+			SwingWorker<Object, Object> worker = new SwingWorker<Object, Object>() {
+
+				@Override
+				protected Object doInBackground() throws Exception {
+					
+					// Evolve new network
+					currentNetwork = NeatUtil.doEvolution(trainingData, properties);
+					
+					evolving = false;
+					
+					return null;
+				}
+			};
+			
+			worker.execute();			
+		}
+		
+		
+		
+
 	}
 }

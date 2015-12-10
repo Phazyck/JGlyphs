@@ -3,6 +3,7 @@ package dk.itu.jglyph.swing;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -164,8 +165,14 @@ public class GlyphFrame extends JFrame
 			e.printStackTrace();
 		}
 		
-		GlyphFrame frame = new GlyphFrame();
-		SwingUtilities.updateComponentTreeUI(frame);
-		frame.setVisible(true);
+		EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+            	GlyphFrame frame = new GlyphFrame();
+        		SwingUtilities.updateComponentTreeUI(frame);
+        		frame.setVisible(true);
+            }
+        });
+		
 	}
 }
