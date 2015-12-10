@@ -2,6 +2,8 @@ package dk.itu.jglyph;
 
 import com.anji.integration.Activator;
 
+import dk.itu.jglyph.features.FeatureExtractors;
+
 public class Filter {
 	
 	// Neural Network activation object
@@ -13,7 +15,12 @@ public class Filter {
 	
 	public boolean evaluate(JGlyph glyph) {
 		//TODO eval glyph using NN from ANJI
-		return true;
+		
+		double edgeCount = FeatureExtractors.edgeCount(glyph);
+		
+		System.out.println(edgeCount);
+		
+		return (edgeCount % 2 == 0);
 	}
 	
 	public void update(JGlyph glyph, boolean classification) {

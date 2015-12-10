@@ -88,7 +88,7 @@ public class FeatureExtractors
 		  List<Double> angles = getAngles(glyph);
 		  if (angles.size() == 0) return Math.PI;
 		  double sum = 0;
-		  System.out.println(angles);
+//		  System.out.println(angles);
 		  for (Double d : angles) {
 			  sum += d;
 		  }

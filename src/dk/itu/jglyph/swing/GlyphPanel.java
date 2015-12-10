@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.border.Border;
 
 import dk.itu.jglyph.Edge;
+import dk.itu.jglyph.Filter;
 import dk.itu.jglyph.JGlyph;
 import dk.itu.jglyph.Node;
 import dk.itu.jglyph.features.FeatureExtractors;
@@ -28,7 +29,9 @@ public class GlyphPanel  extends JComponent
 	private final static int DEFAULT_PADDING = 8;
 	private final static String DEFAULT_TITLE = null;
 	
-	private JGlyph glyph = new JGlyph(3, 3);
+	private JGlyph glyph;
+	
+	private Filter filter;
 	
 	public GlyphPanel()
 	{
@@ -47,6 +50,12 @@ public class GlyphPanel  extends JComponent
 	
 	public GlyphPanel(int padding, String title)
 	{
+		filter = new Filter();
+		
+		glyph = new JGlyph(3, 3);
+		
+		findNewGlyph();
+		
 		Border outerBorder = BorderFactory.createEmptyBorder(padding, padding, padding, padding);
 		Border middleBorder = BorderFactory.createTitledBorder(title);
 		Border compoundBorder = BorderFactory.createCompoundBorder(outerBorder, middleBorder);
@@ -188,5 +197,28 @@ public class GlyphPanel  extends JComponent
 		glyph.mutate();
 		printFeatures();
 		repaint();
+	}
+	
+	private void findNewGlyph()
+	{
+		do
+		{
+			glyph.randomizeEdges();
+		}
+		while(!filter.evaluate(glyph));
+		repaint();
+	}
+
+	public void passGlyph() {
+		System.out.println("PASS");
+		filter.update(glyph, true);
+		findNewGlyph();
+		
+	}
+
+	public void failGlyph() {
+		System.out.println("FAIL");
+		filter.update(glyph, false);
+		findNewGlyph();
 	}
 }

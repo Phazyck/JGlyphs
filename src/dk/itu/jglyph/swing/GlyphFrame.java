@@ -57,6 +57,8 @@ public class GlyphFrame extends JFrame
 		
 		addRandomizerButton(buttonPanel);
 		addMutatorButton(buttonPanel);
+		addButtonPass(buttonPanel);
+		addButtonFail(buttonPanel);
 		
 		add(buttonPanel, constraints);
 	}
@@ -68,12 +70,39 @@ public class GlyphFrame extends JFrame
 		buttonRandomize.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Randomizing.");
 				glyphPanel.randomizeGlyph();
 			}
 		});
 		
 		container.add(buttonRandomize);
+	}
+	
+	private void addButtonPass(Container container)
+	{
+		JButton buttonPass = new JButton("PASS");
+		
+		buttonPass.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				glyphPanel.passGlyph();
+			}
+		});
+		
+		container.add(buttonPass);
+	}
+	
+	private void addButtonFail(Container container)
+	{
+		JButton buttonFail = new JButton("FAIL");
+		
+		buttonFail.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				glyphPanel.failGlyph();
+			}
+		});
+		
+		container.add(buttonFail);
 	}
 	
 	private void addMutatorButton(Container container)
@@ -83,7 +112,6 @@ public class GlyphFrame extends JFrame
 		buttonMutate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Mutating.");
 				glyphPanel.mutateGlyph();
 			}
 		});
