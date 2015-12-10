@@ -32,7 +32,7 @@ import com.anji.util.Configurable;
 import com.anji.util.Properties;
 import com.anji.util.Randomizer;
 
-import dk.itu.jglyph.TrainingSet;
+import dk.itu.jglyph.neat.TrainingSet;
 
 /**
  * Determines fitness based on how close <code>Activator</code> output is to a target.
