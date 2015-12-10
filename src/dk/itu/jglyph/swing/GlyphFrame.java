@@ -155,7 +155,7 @@ public class GlyphFrame extends JFrame
 		try {
 			String laf = UIManager.getSystemLookAndFeelClassName();
 //			laf = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
-			System.out.println(laf);
+//			System.out.println(laf);
 			UIManager.setLookAndFeel(laf);
 
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
