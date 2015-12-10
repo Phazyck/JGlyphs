@@ -141,7 +141,7 @@ public class FeatureExtractors
 		  double l1 = Math.sqrt(x1*x1 + y1*y1);
 		  double l2 = Math.sqrt(x2*x2 + y2*y2);
 		  
-		  return Math.acos(dot/(l1+l2));
+		  return Math.acos(dot/(l1*l2));
 	  }
 
 	/** Minimum distance from center for stroke start/end */
