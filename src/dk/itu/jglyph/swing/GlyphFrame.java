@@ -3,6 +3,7 @@ package dk.itu.jglyph.swing;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -25,13 +26,20 @@ public class GlyphFrame extends JFrame
 	private final static int MIN_HEIGHT = 380;
 	
 	private GlyphPanel glyphPanel;
+//	private GlyphPanel glyphPanel2;
 	
 	public GlyphFrame()
 	{
 		setLayout(new BorderLayout());
 		
-		initGlyph(BorderLayout.CENTER);
-		initButtons(BorderLayout.SOUTH);
+		JPanel panelCenter = new JPanel();
+		add(panelCenter, BorderLayout.CENTER);
+		
+		JPanel panelSouth = new JPanel();
+		add(panelSouth, BorderLayout.SOUTH);
+		
+		addGlyphs(panelCenter);
+		addButtons(panelSouth);
 		
 		setTitle(FRAME_TITLE);
 		
@@ -44,38 +52,47 @@ public class GlyphFrame extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	private void initGlyph(Object constraints)
+	private void addGlyph(Container container)
 	{
 		glyphPanel = new GlyphPanel();
 		
-		add(glyphPanel, constraints);
+		container.add(glyphPanel);
 	}
 	
-	private void initButtons(Object constraints)
+	private void addGlyphs(Container container)
 	{
-		JPanel buttonPanel = new JPanel();
+		GridLayout gridLayout = new GridLayout(1, 0);
+		container.setLayout(gridLayout);
 		
-		addRandomizerButton(buttonPanel);
-		addMutatorButton(buttonPanel);
-		addButtonPass(buttonPanel);
-		addButtonFail(buttonPanel);
+		glyphPanel = new GlyphPanel();
+		container.add(glyphPanel);
 		
-		add(buttonPanel, constraints);
+//		glyphPanel2 = new GlyphPanel();
+//		container.add(glyphPanel2);
 	}
 	
-	private void addRandomizerButton(Container container)
+	private void addButtons(Container container)
 	{
-		JButton buttonRandomize = new JButton("RANDOMIZE");
-		
-		buttonRandomize.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				glyphPanel.randomizeGlyph();
-			}
-		});
-		
-		container.add(buttonRandomize);
+//		addRandomizerButton(container);
+//		addMutatorButton(container);
+		addButtonPass(container);
+		addButtonFail(container);
+//		addCrossButton(container);
 	}
+	
+//	private void addRandomizerButton(Container container)
+//	{
+//		JButton buttonRandomize = new JButton("RANDOMIZE");
+//		
+//		buttonRandomize.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				glyphPanel.randomizeGlyph();
+//			}
+//		});
+//		
+//		container.add(buttonRandomize);
+//	}
 	
 	private void addButtonPass(Container container)
 	{
@@ -105,19 +122,33 @@ public class GlyphFrame extends JFrame
 		container.add(buttonFail);
 	}
 	
-	private void addMutatorButton(Container container)
-	{
-		JButton buttonMutate = new JButton("MUTATE");
-		
-		buttonMutate.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				glyphPanel.mutateGlyph();
-			}
-		});
-		
-		container.add(buttonMutate);
-	}
+//	private void addMutatorButton(Container container)
+//	{
+//		JButton buttonMutate = new JButton("MUTATE");
+//		
+//		buttonMutate.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				glyphPanel.mutateGlyph();
+//			}
+//		});
+//		
+//		container.add(buttonMutate);
+//	}
+	
+//	private void addCrossButton(Container container)
+//	{
+//		JButton buttonCross = new JButton("CROSS");
+//		
+//		buttonCross.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				glyphPanel.crossGlyph(glyphPanel2);
+//			}
+//		});
+//		
+//		container.add(buttonCross);
+//	}
 	
 	public static void main(String[] args)
 	{

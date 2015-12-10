@@ -105,8 +105,7 @@ public class JGlyph implements Graph<Node>
 		{
 			for (int idxB = idxA; idxB < nodes.length; ++idxB) 
 			{
-				boolean value = RNG.nextInt() % 2 == 0;
-				adjMatrix.setValue(idxA, idxB, value); 
+				adjMatrix.setValue(idxA, idxB, RNG.nextBoolean()); 
 			}
 		}
 	}
@@ -118,6 +117,28 @@ public class JGlyph implements Graph<Node>
 		int nodeIdxB = RNG.nextInt(length);
 		boolean value = adjMatrix.getValue(nodeIdxA, nodeIdxB);
 		adjMatrix.setValue(nodeIdxA, nodeIdxB, !value);
+	}
+	
+	public void crossWith(JGlyph that)
+	{
+		AdjacencyMatrix thisMatrix = this.adjMatrix;
+		AdjacencyMatrix thatMatrix = that.adjMatrix;
+		
+		for(int i = 0; i < nodes.length; ++i)
+		{
+			for(int j = i; j < nodes.length; ++j)
+			{
+				if(RNG.nextBoolean())
+				{
+					continue;
+				}
+				
+				boolean thisBool = thisMatrix.getValue(i, j);
+				boolean thatBool = thatMatrix.getValue(i, j);
+				thisMatrix.setValue(i, j, thatBool);
+				thatMatrix.setValue(i, j, thisBool);
+			}
+		}
 	}
 	
 	public int getDegree(int nodeIdx)

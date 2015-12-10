@@ -203,22 +203,53 @@ public class GlyphPanel  extends JComponent
 	{
 		do
 		{
-			glyph.randomizeEdges();
+			double fitness = filter.evaluate(glyph);
+//			System.out.println("Fitness:" + fitness);
+			
+			JGlyph clone;
+			double cloneFitness;
+			
+			do
+			{
+				clone = glyph.clone();
+				clone.mutate();
+				cloneFitness = filter.evaluate(clone);
+				
+//				System.out.println("Clone fit:\t" + cloneFitness);
+				
+			} while(cloneFitness < fitness);
+			
+			
+			glyph = clone;
 		}
-		while(!filter.evaluate(glyph));
+		while(!filter.doesPass(glyph));
+		
+//		System.out.println();
+		
+		printFeatures();
 		repaint();
 	}
 
 	public void passGlyph() {
-		System.out.println("PASS");
+//		System.out.println("PASS");
 		filter.update(glyph, true);
 		findNewGlyph();
 		
 	}
 
 	public void failGlyph() {
-		System.out.println("FAIL");
+//		System.out.println("FAIL");
 		filter.update(glyph, false);
 		findNewGlyph();
+	}
+
+	public void crossGlyph(GlyphPanel that) {
+		JGlyph thisGlyph = this.glyph;
+		JGlyph thatGlyph = that.glyph;
+		
+		thisGlyph.crossWith(thatGlyph);
+		
+		this.repaint();
+		that.repaint();
 	}
 }
