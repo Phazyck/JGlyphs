@@ -148,7 +148,8 @@ public void init( Properties props ) throws Exception {
 
 	// fitness function
 	BulkFitnessFunction fitnessFunc = (BulkFitnessFunction) props
-			.singletonObjectProperty( FITNESS_FUNCTION_CLASS_KEY );
+			.newObjectProperty( FITNESS_FUNCTION_CLASS_KEY );
+//			.singletonObjectProperty( FITNESS_FUNCTION_CLASS_KEY );
 	config.setBulkFitnessFunction( fitnessFunc );
 	maxFitness = fitnessFunc.getMaxFitnessValue();
 
