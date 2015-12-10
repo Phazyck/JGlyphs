@@ -9,10 +9,12 @@ public class FeatureExtractor
 {
   private FeatureExtractor() {}
 
-  public static double minimumAngle(JGlyph glyph)
+  public static double minAngle(JGlyph glyph)
   {
+	  List<Double> angles = getAngles(glyph);
+	  if (angles.size() == 0) return Math.PI;
 	  double min = Double.MAX_VALUE;
-	  for (Double d : getAngles(glyph)) {
+	  for (Double d : angles) {
 		  if (d < min && d != 0) min = d; // TODO do we need to use epsilon for the last comparison?
 	  }
 	  return min;
@@ -20,8 +22,10 @@ public class FeatureExtractor
   
   public static double avgAngle(JGlyph glyph)
   {
-	  double sum = 0;
 	  List<Double> angles = getAngles(glyph);
+	  if (angles.size() == 0) return Math.PI;
+	  double sum = 0;
+	  System.out.println(angles);
 	  for (Double d : angles) {
 		  sum += d;
 	  }
@@ -30,8 +34,10 @@ public class FeatureExtractor
   
   public static double maxAngle(JGlyph glyph) 
   {
+	  List<Double> angles = getAngles(glyph);
+	  if (angles.size() == 0) return Math.PI;
 	  double max = Double.MIN_VALUE;
-	  for (Double d : getAngles(glyph)) {
+	  for (Double d : angles) {
 		  if (d > max) max = d;
 	  }
 	  return max;
@@ -49,6 +55,9 @@ public class FeatureExtractor
 				  Edge e2 = edges.get(j);
 				  Node n1 = node.equals(e1.from) ? e1.to : e1.from;
 				  Node n2 = node.equals(e2.from) ? e2.to : e2.from;
+				  
+				  //Skip dots
+				  if (node.equals(n1) || node.equals(n2)) continue;
 				  
 				  // TODO 0/180 could be sorted our here but we might need that for other metrics
 				  
@@ -69,7 +78,7 @@ public class FeatureExtractor
 	  double l1 = Math.sqrt(x1*x1 + y1*y1);
 	  double l2 = Math.sqrt(x2*x2 + y2*y2);
 	  
-	  return Math.acos(dot/(l1+l2));
+	  return Math.acos(dot/(l1*l2));
   }
 
 /** Minimum distance from center for stroke start/end */
@@ -209,7 +218,7 @@ public class FeatureExtractor
 		  sum += edge.from.x + edge.to.x;
 		  count++;
 	  }
-	  return sum/count;
+	  return sum/(count*2);
   }
 
   /** Average Y for all edges */
@@ -219,8 +228,9 @@ public class FeatureExtractor
 	  int count = 0;
 	  for (Edge edge : glyph.getEdges()) {
 		  sum += edge.from.y + edge.to.y;
+		  count++;
 	  }
-	  return sum/count;
+	  return sum/(count*2);
   }
 
   /** Average X for stroke ends */
