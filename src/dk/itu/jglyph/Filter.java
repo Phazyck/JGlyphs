@@ -18,6 +18,8 @@ public class Filter {
 	
 	private final static String PROPERTIES_FILE_NAME = "glyph.properties";
 	private Properties properties;
+	private final static double THRESHHOLD = 0.5f;
+	
 	
 	// Neural Network activation object
 	private Activator currentNetwork;
@@ -49,16 +51,20 @@ public class Filter {
 		
 	}
 	
-	public boolean evaluate(JGlyph glyph) {
+	public double evaluate(JGlyph glyph) {
 		//TODO eval glyph using NN from ANJI
 		double[] stimulus = FeatureExtractors.getInstance().extractFeatures(glyph);
 		
 		double[] response =  currentNetwork.next(stimulus);
 		
-		if (response[0] > 0.8) { // TODO go from random threshold defined here to something better
-			return true; 
-		}
-		else return false;
+		return response[0];
+	}
+	
+	public boolean doesPass(JGlyph glyph) {
+		
+		double fitness = evaluate(glyph);
+		boolean pass = fitness >= THRESHHOLD;
+		return(pass);
 	}
 	
 	public void update(JGlyph glyph, boolean classification) {
