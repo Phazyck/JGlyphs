@@ -35,9 +35,13 @@ public class Filter {
 		try {
 			properties = new Properties( PROPERTIES_FILE_NAME );
 			
+			int extractorCount = FeatureExtractors.getInstance().totalExtractors();
+			
+			properties.setProperty("stimulus.size", Integer.toString(extractorCount));
+			
 			// NEAT needs at least one stim/target pair, so feed with dummy for starters
 			List<StimulusTargetPair> temp = new ArrayList<>();
-			double[] tempstim = new double[14];
+			double[] tempstim = new double[extractorCount];
 			double[] temptarg = {1};
 			temp.add(new StimulusTargetPair(tempstim, temptarg));			
 			
