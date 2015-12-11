@@ -1,4 +1,6 @@
-package dk.itu.jglyph.evolution;
+package dk.itu.jglyph.util;
+
+import dk.itu.jglyph.evolution.Subject;
 
 public class Random 
 {
@@ -62,5 +64,11 @@ public class Random
 				return(item);
 			}
 		}
+	}
+	
+	public static int getInt(int max)
+	{
+		int result = RNG.nextInt(max);
+		return(result);
 	}
 }

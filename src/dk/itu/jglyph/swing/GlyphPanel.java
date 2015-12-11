@@ -6,17 +6,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
-import java.util.HashSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 
 import dk.itu.jglyph.Edge;
-import dk.itu.jglyph.Filter;
 import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.Node;
-import dk.itu.jglyph.evolution.GlyphEvolver;
 
 public class GlyphPanel  extends JComponent
 {
@@ -27,12 +24,8 @@ public class GlyphPanel  extends JComponent
 	
 	private final static int DEFAULT_PADDING = 8;
 	private final static String DEFAULT_TITLE = null;
-	private HashSet<Glyph> visited = new HashSet<>();
 	
-	private GlyphEvolver evolver;
 	private Glyph glyph;
-	
-	private Filter filter;
 	
 	public GlyphPanel()
 	{
@@ -49,14 +42,19 @@ public class GlyphPanel  extends JComponent
 		this(DEFAULT_PADDING, title);
 	}
 	
+	public void setGlyph(Glyph glyph)
+	{
+		this.glyph = glyph;
+		repaint();
+	}
+	
+	public Glyph getGlyph()
+	{
+		return(glyph);
+	}
+	
 	public GlyphPanel(int padding, String title)
 	{
-		filter = new Filter();
-		
-		evolver = new GlyphEvolver(filter.getEvaluator());
-		glyph = evolver.getChampion().glyph;
-//		findNewGlyph();
-		
 		Border outerBorder = BorderFactory.createEmptyBorder(padding, padding, padding, padding);
 		Border middleBorder = BorderFactory.createTitledBorder(title);
 		Border compoundBorder = BorderFactory.createCompoundBorder(outerBorder, middleBorder);
@@ -205,55 +203,19 @@ public class GlyphPanel  extends JComponent
 //		repaint();
 //	}
 	
-	private void findNewGlyph()
-	{	
-		visited.add(glyph.clone());
-		
-//		evolver.init(filter);
-		
-		evolver.init(filter.getEvaluator());
-		evolver.evolve();
-		
-		glyph = evolver.getChampion().glyph;
-		
-		
-//		Glyph backup = glyph.clone();
-//		
-//		while(visited.contains(glyph))
-//		{
-//			int attempts = 0;
-//			
-//			do
-//			{
-//				glyph = backup.clone();
-//				glyph.mutate();
-//				
-//				if(attempts++ > 100)
-//				{
-//					attempts = 0;
-//					backup.randomizeEdges();
-//				}
-//								
-//			} while(!filter.doesPass(glyph));
-//		}
-				
-//		System.out.println();
-		
-//		printFeatures();
-		repaint();
-	}
+	
 
-	public void passGlyph() {
-//		System.out.println("PASS");
-		filter.update(glyph, true);
-		findNewGlyph();
-	}
-
-	public void failGlyph() {
-//		System.out.println("FAIL");
-		filter.update(glyph, false);
-		findNewGlyph();
-	}
+//	public void passGlyph() {
+////		System.out.println("PASS");
+//		filter.update(glyph, true);
+//		findNewGlyph();
+//	}
+//
+//	public void failGlyph() {
+////		System.out.println("FAIL");
+//		filter.update(glyph, false);
+//		findNewGlyph();
+//	}
 
 //	public void crossGlyph(GlyphPanel that) {
 //		Glyph thisGlyph = this.glyph;

@@ -1,9 +1,13 @@
 package dk.itu.jglyph.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.features.FeatureExtractors;
+import dk.itu.jglyph.neat.StimulusTargetPair;
 import dk.itu.jglyph.neat.TrainingSet;
 
 public class Model 
@@ -32,7 +36,7 @@ public class Model
 		nodeBetter.addChild(nodeWorse);
 	}
 	
-	public void updateTrainingSet()
+	public List<StimulusTargetPair> getTrainingSet()
 	{
 		int count = nodes.size();
 		
@@ -40,9 +44,15 @@ public class Model
 		
 		if(count < 1)
 		{
-			TrainingSet.stimuli = new double[1][extractors.count()];
-			TrainingSet.targets = new double[][]{{0}};
-			return;
+			// NEAT needs at least one stim/target pair, so feed with dummy for starters
+			List<StimulusTargetPair> data = new LinkedList<>();
+			
+			double[] stimulus = new double[extractors.count()];
+			double[] target = new double[]{0};
+			StimulusTargetPair pair = new StimulusTargetPair(stimulus, target);
+			data.add(pair);
+
+			return(data);	
 		}
 		
 		Node[] values = new Node[count]; 
@@ -64,20 +74,19 @@ public class Model
 			childCounts[i] = childCount;
 		}
 		
-		double[][] stimuli = new double[count][];
-		double[][] targets = new double[count][];
+		List<StimulusTargetPair> data = new LinkedList<>();
 		
 		for(int i = 0; i < count; ++i)
 		{
 			Node value = values[i];
 			Glyph glyph = value.glyph;
-			stimuli[i] = FeatureExtractors.getInstance().extractFeatures(glyph);
-			double target = childCounts[i] / maxChildCount;
-			targets[i] = new double[] { target };
+			double[] stimulus = FeatureExtractors.getInstance().extractFeatures(glyph);
+			double[] target = new double[] {childCounts[i] / maxChildCount };
+			StimulusTargetPair pair = new StimulusTargetPair(stimulus, target);
+			data.add(pair);
 		}
-		
-		TrainingSet.stimuli = stimuli;
-		TrainingSet.targets = targets;
+
+		return(data);	
 	}
 
 }

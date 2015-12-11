@@ -1,9 +1,13 @@
 package dk.itu.jglyph.evolution;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.TreeSet;
 
 import dk.itu.jglyph.Evaluator;
 import dk.itu.jglyph.Glyph;
+import dk.itu.jglyph.util.Random;
 
 public class GlyphEvolver 
 {
@@ -62,6 +66,13 @@ public class GlyphEvolver
 		glyphHeight= properties.tryGetInt("glyph.height", DEFAULT_GLYPH_HEIGHT);
 				
 		init(evaluator);
+	}
+	
+	public TreeSet<Subject> clonePopulation()
+	{
+		TreeSet<Subject> clone = new TreeSet<Subject>(population);
+		
+		return(clone);
 	}
 	
 	public void init(Evaluator evaluator)

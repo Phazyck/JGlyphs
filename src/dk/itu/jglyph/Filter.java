@@ -1,7 +1,6 @@
 package dk.itu.jglyph;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingWorker;
 
@@ -11,6 +10,7 @@ import com.anji.util.Properties;
 import dk.itu.jglyph.features.FeatureExtractors;
 import dk.itu.jglyph.neat.NeatUtil;
 import dk.itu.jglyph.neat.StimulusTargetPair;
+import dk.itu.jglyph.user.Model;
 
 public class Filter {
 	
@@ -20,7 +20,7 @@ public class Filter {
 	private Evaluator evaluator;
 	
 	// training data gathered so far
-	private List<StimulusTargetPair> trainingData;
+	private Model model;
 	
 	public Evaluator getEvaluator()
 	{
@@ -30,7 +30,7 @@ public class Filter {
 	public Filter() {
 		// TODO take care of everything (get it set up in default state)
 		
-		trainingData = new ArrayList<>();
+		model = new Model();
 		
 		// properties file object
 		try {
@@ -40,13 +40,7 @@ public class Filter {
 			
 			properties.setProperty("stimulus.size", Integer.toString(extractorCount));
 			
-			// NEAT needs at least one stim/target pair, so feed with dummy for starters
-			List<StimulusTargetPair> temp = new ArrayList<>();
-			double[] tempstim = new double[extractorCount];
-			double[] temptarg = {1};
-			temp.add(new StimulusTargetPair(tempstim, temptarg));			
-			
-			updateEvalutor(temp);
+			evolveEvalutor();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -54,24 +48,19 @@ public class Filter {
 		}
 	}
 	
-	private void updateEvalutor(List<StimulusTargetPair> data)
+	private void evolveEvalutor()
 	{
+		List<StimulusTargetPair> data = model.getTrainingSet();
 		Activator network = NeatUtil.doEvolution(data, properties);
 		evaluator = new Evaluator(network);
 	}
 	
 	private boolean evolving = false;
 	
-	public void update(Glyph glyph, boolean classification) {
+	public void update(Glyph better, Glyph worse) {
 		//TODO only re-evolve after X new classifications added, instead of every time
 		
-		// call feature extractor get double array
-		double[] stimulus = FeatureExtractors.getInstance().extractFeatures(glyph); 
-		
-		double[] target = { classification ? 1.0 : 0.0 };
-		
-		//  add to trainingdata
-		trainingData.add(new StimulusTargetPair(stimulus, target));
+		model.addRelation(better, worse);
 		
 		if(!evolving)
 		{
@@ -82,7 +71,7 @@ public class Filter {
 				protected Object doInBackground() throws Exception {
 					
 					// Evolve new network
-					updateEvalutor(trainingData);
+					evolveEvalutor();
 					
 					evolving = false;
 					
