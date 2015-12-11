@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -66,6 +68,27 @@ public class GlyphFrame extends JFrame
 		
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.addKeyListener(new KeyListener() {
+			
+			@Override public void keyTyped(KeyEvent e) { }
+			@Override public void keyPressed(KeyEvent e) { }
+			@Override public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) 
+				{
+					case KeyEvent.VK_LEFT: {
+						pickLeft();
+					} break;
+					case KeyEvent.VK_RIGHT: {
+						pickRight();
+					} break;
+					default: 
+						break;
+				}
+			}
+			
+			
+		});
 		
 		updateGlyphs();
 	}
