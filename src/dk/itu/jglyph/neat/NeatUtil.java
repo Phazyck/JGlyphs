@@ -1,14 +1,11 @@
 package dk.itu.jglyph.neat;
 
 import java.util.List;
-import java.util.Map;
 
 import com.anji.integration.Activator;
 import com.anji.integration.ActivatorTranscriber;
 import com.anji.neat.Evolver;
 import com.anji.util.Properties;
-
-import dk.itu.jglyph.JGlyph;
 
 public class NeatUtil {
 	

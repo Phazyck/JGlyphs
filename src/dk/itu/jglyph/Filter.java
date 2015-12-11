@@ -3,8 +3,6 @@ package dk.itu.jglyph;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import javax.swing.SwingWorker;
 
 import com.anji.integration.Activator;
@@ -54,7 +52,7 @@ public class Filter {
 		
 	}
 	
-	public double evaluate(JGlyph glyph) {
+	public double evaluate(Glyph glyph) {
 		//TODO eval glyph using NN from ANJI
 		double[] stimulus = FeatureExtractors.getInstance().extractFeatures(glyph);
 		
@@ -63,7 +61,7 @@ public class Filter {
 		return response[0];
 	}
 	
-	public boolean doesPass(JGlyph glyph) {
+	public boolean doesPass(Glyph glyph) {
 		
 		double fitness = evaluate(glyph);
 		
@@ -83,7 +81,7 @@ public class Filter {
 	
 	private boolean evolving = false;
 	
-	public void update(JGlyph glyph, boolean classification) {
+	public void update(Glyph glyph, boolean classification) {
 		//TODO only re-evolve after X new classifications added, instead of every time
 		
 		// call feature extractor get double array

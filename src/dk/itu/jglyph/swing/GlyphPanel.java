@@ -14,7 +14,7 @@ import javax.swing.border.Border;
 
 import dk.itu.jglyph.Edge;
 import dk.itu.jglyph.Filter;
-import dk.itu.jglyph.JGlyph;
+import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.Node;
 import dk.itu.jglyph.features.FeatureExtractors;
 import dk.itu.jglyph.features.IFeatureExtractor;
@@ -28,9 +28,9 @@ public class GlyphPanel  extends JComponent
 	
 	private final static int DEFAULT_PADDING = 8;
 	private final static String DEFAULT_TITLE = null;
-	private HashSet<JGlyph> visited = new HashSet<>();
+	private HashSet<Glyph> visited = new HashSet<>();
 	
-	private JGlyph glyph;
+	private Glyph glyph;
 	
 	private Filter filter;
 	
@@ -53,7 +53,7 @@ public class GlyphPanel  extends JComponent
 	{
 		filter = new Filter();
 		
-		glyph = new JGlyph(3, 3);
+		glyph = new Glyph(3, 3);
 		
 		findNewGlyph();
 		
@@ -200,31 +200,14 @@ public class GlyphPanel  extends JComponent
 		repaint();
 	}
 	
-	private boolean isNew(JGlyph glyph)
-	{
-		return !visited.contains(glyph);
-	}
-	
-	private boolean isPassable(JGlyph glyph)
-	{
-		return filter.doesPass(glyph);
-	}
-	
 	private void findNewGlyph()
 	{	
 		visited.add(glyph.clone());
 		
-		JGlyph backup = glyph.clone();
+		Glyph backup = glyph.clone();
 		
-		while(true)
+		while(visited.contains(glyph))
 		{
-			boolean isNew = isNew(glyph);
-			
-			if(isNew)
-			{
-				break;
-			}
-			
 			int attempts = 0;
 			
 			do
@@ -261,8 +244,8 @@ public class GlyphPanel  extends JComponent
 	}
 
 	public void crossGlyph(GlyphPanel that) {
-		JGlyph thisGlyph = this.glyph;
-		JGlyph thatGlyph = that.glyph;
+		Glyph thisGlyph = this.glyph;
+		Glyph thatGlyph = that.glyph;
 		
 		thisGlyph.crossWith(thatGlyph);
 		

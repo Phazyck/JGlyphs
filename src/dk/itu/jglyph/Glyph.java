@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class JGlyph implements Graph<Node>
+public class Glyph
 {
 	@Override
 	public int hashCode() {
@@ -22,7 +22,7 @@ public class JGlyph implements Graph<Node>
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		JGlyph other = (JGlyph) obj;
+		Glyph other = (Glyph) obj;
 		if (adjMatrix == null) {
 			if (other.adjMatrix != null)
 				return false;
@@ -38,7 +38,7 @@ public class JGlyph implements Graph<Node>
 	private int width;
 
 	/** Constructs a Glyph with 'width * height' nodes. */
-	public JGlyph(int width, int height) 
+	public Glyph(int width, int height) 
 	{
 		this.width = width;
 		int size = width * height;
@@ -54,14 +54,13 @@ public class JGlyph implements Graph<Node>
 		adjMatrix = new AdjacencyMatrix(size);
 	}
 	
-	private JGlyph(Nodes nodes, AdjacencyMatrix adjMatrix, int width)
+	private Glyph(Nodes nodes, AdjacencyMatrix adjMatrix, int width)
 	{
 		this.nodes = nodes;
 		this.adjMatrix = adjMatrix;
 		this.width = width;
 	}
 
-	@Override
 	public List<Edge> getEdges(int nodeIdx) {
 		List<Edge> edges = new ArrayList<Edge>();
 		for (int idx = 0; idx < adjMatrix.size; ++idx) 
@@ -77,7 +76,6 @@ public class JGlyph implements Graph<Node>
 		return edges;
 	}
 
-	@Override
 	public List<Edge> getEdges() {
 		List<Edge> edges = new ArrayList<Edge>();
 		
@@ -99,26 +97,22 @@ public class JGlyph implements Graph<Node>
 		return edges;
 	}
 
-	@Override
 	public Iterable<Node> getNodes()
 	{
 		return(nodes);
 	}
 
-	@Override
 	public int getNodeId(int x, int y) 
 	{
 		return x+width*y;
 	}
 
-	@Override
 	public void makeEdge(int nodeIdxA, int nodeIdxB) 
 	{
 		// TODO: Code for making sure parallel overlapping edges get combined could go here
 		adjMatrix.setValue(nodeIdxA, nodeIdxB, true);
 	}
 
-	@Override
 	public void removeEdge(int nodeIdxA, int nodeIdxB) 
 	{
 		adjMatrix.setValue(nodeIdxA, nodeIdxB, false);
@@ -144,7 +138,7 @@ public class JGlyph implements Graph<Node>
 		adjMatrix.setValue(nodeIdxA, nodeIdxB, !value);
 	}
 	
-	public void crossWith(JGlyph that)
+	public void crossWith(Glyph that)
 	{
 		AdjacencyMatrix thisMatrix = this.adjMatrix;
 		AdjacencyMatrix thatMatrix = that.adjMatrix;
@@ -211,13 +205,13 @@ public class JGlyph implements Graph<Node>
 		return nodes.centroid;
 	}
 	
-	public JGlyph clone()
+	public Glyph clone()
 	{
 		Nodes cloneNodes = nodes;
 		AdjacencyMatrix cloneMatrix = adjMatrix.clone();
 		int cloneWidth = width;
 		
-		JGlyph clone = new JGlyph(cloneNodes, cloneMatrix, cloneWidth);
+		Glyph clone = new Glyph(cloneNodes, cloneMatrix, cloneWidth);
 		
 		return(clone);
 	}

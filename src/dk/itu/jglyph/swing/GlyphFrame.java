@@ -52,13 +52,6 @@ public class GlyphFrame extends JFrame
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-
-	private void addGlyph(Container container)
-	{
-		glyphPanel = new GlyphPanel();
-		
-		container.add(glyphPanel);
-	}
 	
 	private void addGlyphs(Container container)
 	{

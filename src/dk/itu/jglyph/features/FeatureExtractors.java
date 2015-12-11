@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import dk.itu.jglyph.Edge;
-import dk.itu.jglyph.JGlyph;
+import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.Node;
 
 public class FeatureExtractors 
@@ -20,25 +20,25 @@ public class FeatureExtractors
 		extractors = new ArrayList<>();
 		descriptions = new ArrayList<>();
 		
-		addExtractor((JGlyph g) -> minAngle(g), "Minimum angle.");
-		addExtractor((JGlyph g) -> avgAngle(g), "Average angle.");
-		addExtractor((JGlyph g) -> maxAngle(g), "Maximum angle.");
+		addExtractor((Glyph g) -> minAngle(g), "Minimum angle.");
+		addExtractor((Glyph g) -> avgAngle(g), "Average angle.");
+		addExtractor((Glyph g) -> maxAngle(g), "Maximum angle.");
 		
-		addExtractor((JGlyph g) -> minDistanceToCenter(g), "Minimum distance to center.");
-		addExtractor((JGlyph g) -> avgDistanceToCenter(g), "Average distance to center");
-		addExtractor((JGlyph g) -> maxDistanceToCenter(g), "Maximum distance to center.");
+		addExtractor((Glyph g) -> minDistanceToCenter(g), "Minimum distance to center.");
+		addExtractor((Glyph g) -> avgDistanceToCenter(g), "Average distance to center");
+		addExtractor((Glyph g) -> maxDistanceToCenter(g), "Maximum distance to center.");
 		
-		addExtractor((JGlyph g) -> minEdgeLength(g), "Minimum edge length.");
-		addExtractor((JGlyph g) -> avgEdgeLength(g), "Average edge length.");
-		addExtractor((JGlyph g) -> maxEdgeLength(g), "Maximum edge length.");
+		addExtractor((Glyph g) -> minEdgeLength(g), "Minimum edge length.");
+		addExtractor((Glyph g) -> avgEdgeLength(g), "Average edge length.");
+		addExtractor((Glyph g) -> maxEdgeLength(g), "Maximum edge length.");
 		
-		addExtractor((JGlyph g) -> avgStrokeEndsX(g), "Average stroke ends X.");
-		addExtractor((JGlyph g) -> avgStrokeEndsY(g), "Average stroke ends Y.");
+		addExtractor((Glyph g) -> avgStrokeEndsX(g), "Average stroke ends X.");
+		addExtractor((Glyph g) -> avgStrokeEndsY(g), "Average stroke ends Y.");
 		
-		addExtractor((JGlyph g) -> unitCount(g), "Unit count.");
-		addExtractor((JGlyph g) -> edgeCount(g), "Edge count.");
+		addExtractor((Glyph g) -> unitCount(g), "Unit count.");
+		addExtractor((Glyph g) -> edgeCount(g), "Edge count.");
 		
-		addExtractor((JGlyph g) -> strokeEstimate(g), "Stroke count estimate.");
+		addExtractor((Glyph g) -> strokeEstimate(g), "Stroke count estimate.");
 	}
 	
 	private void addExtractor(IFeatureExtractor extractor, String description)
@@ -52,7 +52,7 @@ public class FeatureExtractors
 		return extractors.get(index);
 	}
 	
-	public double[] extractFeatures(JGlyph glyph)
+	public double[] extractFeatures(Glyph glyph)
 	{
 		int length = extractors.size();
 		
@@ -91,7 +91,7 @@ public class FeatureExtractors
 		return(instance);
 	}
 	
-	public static double minAngle(JGlyph glyph)
+	public static double minAngle(Glyph glyph)
 	  {
 		  List<Double> angles = getAngles(glyph);
 		  if (angles.size() == 0) return Math.PI;
@@ -102,7 +102,7 @@ public class FeatureExtractors
 		  return min;
 	  }
 	  
-	  public static double avgAngle(JGlyph glyph)
+	  public static double avgAngle(Glyph glyph)
 	  {
 		  List<Double> angles = getAngles(glyph);
 		  if (angles.size() == 0) return Math.PI;
@@ -114,7 +114,7 @@ public class FeatureExtractors
 		  return sum / angles.size();
 	  }
 	  
-	  public static double maxAngle(JGlyph glyph) 
+	  public static double maxAngle(Glyph glyph) 
 	  {
 		  List<Double> angles = getAngles(glyph);
 		  if (angles.size() == 0) return Math.PI;
@@ -125,7 +125,7 @@ public class FeatureExtractors
 		  return max;
 	  }
 	  
-	  private static List<Double> getAngles(JGlyph g) {
+	  private static List<Double> getAngles(Glyph g) {
 		  List<Double> result = new ArrayList<Double>();
 		  for (Node node : g.getNodes()) {
 			  // TODO x/y cannot be double with our current creation scheme
@@ -164,7 +164,7 @@ public class FeatureExtractors
 	  }
 
 	/** Minimum distance from center for stroke start/end */
-	  public static double minDistanceToCenter(JGlyph glyph) 
+	  public static double minDistanceToCenter(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
 		  
@@ -192,7 +192,7 @@ public class FeatureExtractors
 	  }
 
 	  /** Average distance from center for stroke start/end */
-	  public static double avgDistanceToCenter(JGlyph glyph) 
+	  public static double avgDistanceToCenter(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
 		  int count = ends.size();
@@ -217,7 +217,7 @@ public class FeatureExtractors
 	  }
 
 	  /** Maximum distance from center for stroke start/end */
-	  public static double maxDistanceToCenter(JGlyph glyph) 
+	  public static double maxDistanceToCenter(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
 		  
@@ -245,7 +245,7 @@ public class FeatureExtractors
 	  }
 
 	  /** Number of edges */
-	  public static double edgeCount(JGlyph glyph) 
+	  public static double edgeCount(Glyph glyph) 
 	  {
 		  int count = glyph.getEdges().size();
 		  
@@ -253,7 +253,7 @@ public class FeatureExtractors
 	  }
 
 	  /** Number of connected units */
-	  public static double unitCount(JGlyph glyph) 
+	  public static double unitCount(Glyph glyph) 
 	  {
 		  Iterable<Edge> edges = glyph.getEdges();
 		  // List of sets found
@@ -279,7 +279,7 @@ public class FeatureExtractors
 	  }
 
 	  /** An estimate for how many strokes would be needed to draw this */
-	  public static double strokeEstimate(JGlyph glyph) 
+	  public static double strokeEstimate(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
 		  int count = ends.size();
@@ -290,7 +290,7 @@ public class FeatureExtractors
 	  }
 
 	  /** Average X for all edges */
-	  public static double avgX(JGlyph glyph) 
+	  public static double avgX(Glyph glyph) 
 	  {
 		  double sum = 0;
 		  int count = 0;
@@ -302,7 +302,7 @@ public class FeatureExtractors
 	  }
 
 	  /** Average Y for all edges */
-	  public static double avgY(JGlyph glyph) 
+	  public static double avgY(Glyph glyph) 
 	  {
 		  double sum = 0;
 		  int count = 0;
@@ -314,7 +314,7 @@ public class FeatureExtractors
 	  }
 
 	  /** Average X for stroke ends */
-	  public static double avgStrokeEndsX(JGlyph glyph) 
+	  public static double avgStrokeEndsX(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
 		  int count = ends.size();
@@ -339,7 +339,7 @@ public class FeatureExtractors
 	  }
 
 	  /** Average Y for stroke ends */
-	  public static double avgStrokeEndsY(JGlyph glyph) 
+	  public static double avgStrokeEndsY(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
 		  int count = ends.size();
@@ -364,7 +364,7 @@ public class FeatureExtractors
 	  }
 
 	  /** Minimum edge length */
-	  public static double minEdgeLength(JGlyph glyph) 
+	  public static double minEdgeLength(Glyph glyph) 
 	  {
 		  double minLength = Double.MAX_VALUE;
 		  for (Edge edge : glyph.getEdges()) {
@@ -375,7 +375,7 @@ public class FeatureExtractors
 	  }
 
 	  /** Maximum edge length */
-	  public static double maxEdgeLength(JGlyph glyph) 
+	  public static double maxEdgeLength(Glyph glyph) 
 	  {
 		  double maxLength = Double.MIN_VALUE;
 		  for (Edge edge : glyph.getEdges()) {
@@ -386,7 +386,7 @@ public class FeatureExtractors
 	  }
 
 	  /** Average edge length */
-	  public static double avgEdgeLength(JGlyph glyph) 
+	  public static double avgEdgeLength(Glyph glyph) 
 	  {
 		  double sum = 0;
 		  int count = 0;
