@@ -8,31 +8,35 @@ import dk.itu.jglyph.Glyph;
 public class GlyphEvolver 
 {
 	private final static int DEFAULT_POPULATION_SIZE = 256;
-	private int populationSize = DEFAULT_POPULATION_SIZE;
+	private final static int DEFAULT_NUMBER_OF_GENERATIONS = 1024;
 	
-	private final static int DEFAULT_ITERATION_LIMIT = 1024;
-	private int iterationLimit = DEFAULT_ITERATION_LIMIT;
-	
-	private final static double DEFAULT_TARGET_FITNESS = 0.8;
-	private double targetFitness = DEFAULT_TARGET_FITNESS;
+	private final static double DEFAULT_FITNESS_TARGET = 0.8;
 	
 	private final static double DEFAULT_BEST_SURVIVOR_RATE = 0.3;
-	private double bestSurvivorRate = DEFAULT_BEST_SURVIVOR_RATE;
-	
 	private final static double DEFAULT_TOTAL_SURVIVOR_RATE = 0.5;
-	private double totalSuvirvorRate = DEFAULT_TOTAL_SURVIVOR_RATE;
 	
 	private final static double DEFAULT_PARENT_PICK_CHANCE = 0.5;
-	private double parentPickChance = DEFAULT_PARENT_PICK_CHANCE;
-	
 	private final static double DEFAULT_PARENT_PICK_CHANCE_INCREMENT = -0.01;
-	private double parentPickChanceIncrement = DEFAULT_PARENT_PICK_CHANCE_INCREMENT;
 	
-	private static final double DEFAULT_MUTATION_CHANCE = 0.2;
-	private double mutationChance = DEFAULT_MUTATION_CHANCE;
+	private final static double DEFAULT_MUTATION_CHANCE = 0.2;
+	private final static double DEFAULT_CROSSOVER_CHANCE = 0.95;
 	
-	private static final double DEFAULT_CROSSOVER_CHANCE = 0.95;
-	private double crossoverChance = DEFAULT_CROSSOVER_CHANCE;
+	private final static int DEFAULT_GLYPH_WIDTH = 3;
+	private final static int DEFAULT_GLYPH_HEIGHT = 3;
+	
+	private int populationSize;
+	private int numberOfGenerations;
+	
+	private double fitnessTarget;
+	
+	private double bestSurvivorRate;
+	private double totalSuvirvorRate;
+	
+	private double parentPickChance;
+	private double parentPickChanceIncrement;
+	
+	private double mutationChance;
+	private double crossoverChance;
 	
 	private int glyphWidth;
 	private int glyphHeight;
@@ -40,11 +44,23 @@ public class GlyphEvolver
 	private Evaluator evaluator;
 	
 	private TreeSet<Subject> population;
-
-	public GlyphEvolver(int glyphWidth, int glyphHeight, Evaluator evaluator)
+	
+	public GlyphEvolver(Evaluator evaluator)
 	{
-		this.glyphWidth = glyphWidth;
-		this.glyphHeight = glyphHeight;
+		GlyphProperties properties = new GlyphProperties("glyph.properties");
+		
+		populationSize = properties.tryGetInt("popul.size", DEFAULT_POPULATION_SIZE);
+		numberOfGenerations = properties.tryGetInt("num.generations", DEFAULT_NUMBER_OF_GENERATIONS);
+		fitnessTarget = properties.tryGetDouble("fitness.target", DEFAULT_FITNESS_TARGET);
+		bestSurvivorRate = properties.tryGetDouble("survivor.rate.best", DEFAULT_BEST_SURVIVOR_RATE);
+		totalSuvirvorRate = properties.tryGetDouble("survivor.rate.total", DEFAULT_TOTAL_SURVIVOR_RATE);
+		parentPickChance = properties.tryGetDouble("parent.pick.chance", DEFAULT_PARENT_PICK_CHANCE);
+		parentPickChanceIncrement = properties.tryGetDouble("parent.pick.chance.increment", DEFAULT_PARENT_PICK_CHANCE_INCREMENT);
+		mutationChance = properties.tryGetDouble("mutation.chance", DEFAULT_MUTATION_CHANCE);
+		crossoverChance = properties.tryGetDouble("crossover.chance", DEFAULT_CROSSOVER_CHANCE);
+		glyphWidth = properties.tryGetInt("glyph.width", DEFAULT_GLYPH_WIDTH);
+		glyphHeight= properties.tryGetInt("glyph.height", DEFAULT_GLYPH_HEIGHT);
+				
 		init(evaluator);
 	}
 	
@@ -86,19 +102,19 @@ public class GlyphEvolver
 
 	public void evolve()
 	{
-		for(int iteration = 0; iteration < iterationLimit; ++iteration)
+		for(int generation = 0; generation < numberOfGenerations; ++generation)
 		{
 			Subject champion = getChampion();
 			
 			double bestFitness = champion.fitness;
 			double worstFitness = population.last().fitness;
 			
-			System.out.printf("Generation #%d\n", iteration);
+			System.out.printf("Generation #%d\n", generation);
 			System.out.printf("Best fitness %f\n", bestFitness);
 			System.out.printf("Worst fitness %f\n", worstFitness);
 			System.out.println();
 			
-			if(champion.fitness >= targetFitness)
+			if(champion.fitness >= fitnessTarget)
 			{
 				break;
 			}

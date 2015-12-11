@@ -54,9 +54,7 @@ public class GlyphPanel  extends JComponent
 	{
 		filter = new Filter();
 		
-		int width = 3;
-		int height = 3;
-		evolver = new GlyphEvolver(width, height, filter.getEvaluator());
+		evolver = new GlyphEvolver(filter.getEvaluator());
 		glyph = evolver.getChampion().glyph;
 //		findNewGlyph();
 		
