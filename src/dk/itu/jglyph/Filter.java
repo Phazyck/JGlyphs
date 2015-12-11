@@ -16,13 +16,16 @@ public class Filter {
 	
 	private final static String PROPERTIES_FILE_NAME = "glyph.properties";
 	private Properties properties;
-	private double threshhold = 1f;
 	
-	// Neural Network activation object
-	private Activator currentNetwork;
+	private Evaluator evaluator;
 	
 	// training data gathered so far
 	private List<StimulusTargetPair> trainingData;
+	
+	public Evaluator getEvaluator()
+	{
+		return(evaluator);
+	}
 	
 	public Filter() {
 		// TODO take care of everything (get it set up in default state)
@@ -43,40 +46,18 @@ public class Filter {
 			double[] temptarg = {1};
 			temp.add(new StimulusTargetPair(tempstim, temptarg));			
 			
-			currentNetwork = NeatUtil.doEvolution(temp, properties);
+			updateEvalutor(temp);
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
 	
-	public double evaluate(Glyph glyph) {
-		//TODO eval glyph using NN from ANJI
-		double[] stimulus = FeatureExtractors.getInstance().extractFeatures(glyph);
-		
-		double[] response =  currentNetwork.next(stimulus);
-		
-		return response[0];
-	}
-	
-	public boolean doesPass(Glyph glyph) {
-		
-		double fitness = evaluate(glyph);
-		
-		boolean pass = fitness + Double.MIN_VALUE >= threshhold;
-		
-		if(pass)
-		{
-			threshhold = 1;
-		}
-		else
-		{
-			threshhold *= 0.9;
-		}
-		
-		return(pass);
+	private void updateEvalutor(List<StimulusTargetPair> data)
+	{
+		Activator network = NeatUtil.doEvolution(data, properties);
+		evaluator = new Evaluator(network);
 	}
 	
 	private boolean evolving = false;
@@ -101,7 +82,7 @@ public class Filter {
 				protected Object doInBackground() throws Exception {
 					
 					// Evolve new network
-					currentNetwork = NeatUtil.doEvolution(trainingData, properties);
+					updateEvalutor(trainingData);
 					
 					evolving = false;
 					
@@ -111,9 +92,5 @@ public class Filter {
 			
 			worker.execute();			
 		}
-		
-		
-		
-
 	}
 }

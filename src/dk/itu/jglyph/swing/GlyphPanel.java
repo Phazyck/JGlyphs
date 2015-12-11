@@ -16,8 +16,8 @@ import dk.itu.jglyph.Edge;
 import dk.itu.jglyph.Filter;
 import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.Node;
-import dk.itu.jglyph.features.FeatureExtractors;
-import dk.itu.jglyph.features.IFeatureExtractor;
+import dk.itu.jglyph.evolution.GlyphEvolver;
+import dk.itu.jglyph.evolution.Subject;
 
 public class GlyphPanel  extends JComponent
 {
@@ -30,6 +30,7 @@ public class GlyphPanel  extends JComponent
 	private final static String DEFAULT_TITLE = null;
 	private HashSet<Glyph> visited = new HashSet<>();
 	
+	private GlyphEvolver evolver;
 	private Glyph glyph;
 	
 	private Filter filter;
@@ -53,9 +54,11 @@ public class GlyphPanel  extends JComponent
 	{
 		filter = new Filter();
 		
-		glyph = new Glyph(3, 3);
-		
-		findNewGlyph();
+		int width = 3;
+		int height = 3;
+		evolver = new GlyphEvolver(width, height, filter.getEvaluator());
+		glyph = evolver.getChampion().glyph;
+//		findNewGlyph();
 		
 		Border outerBorder = BorderFactory.createEmptyBorder(padding, padding, padding, padding);
 		Border middleBorder = BorderFactory.createTitledBorder(title);
@@ -72,6 +75,11 @@ public class GlyphPanel  extends JComponent
 		double maxX = Double.MIN_VALUE;
 		double minY = Double.MAX_VALUE;
 		double maxY = Integer.MIN_VALUE;
+		
+		if(glyph == null)
+		{
+			return;
+		}
 		
 		for(Node node : glyph.getNodes())
 		{
@@ -168,61 +176,69 @@ public class GlyphPanel  extends JComponent
         g2.setStroke(stroke);
 	}
 	
-	private void printFeatures()
-	{
-		FeatureExtractors extractors = FeatureExtractors.getInstance();
-		int count = extractors.count();
-		
-		System.out.println("--- FEATURES ---");
-		
-		for(int idx = 0; idx < count; ++idx)
-		{
-			IFeatureExtractor extractor = extractors.getExtractor(idx);
-			String description = extractors.getDescription(idx);
-			double feature = extractor.extract(glyph);
-			System.out.printf("%s\n\t%f\n", description, feature);
-		}
-		
-		System.out.println("----------------");
-	}
+//	private void printFeatures()
+//	{
+//		FeatureExtractors extractors = FeatureExtractors.getInstance();
+//		int count = extractors.count();
+//		
+//		System.out.println("--- FEATURES ---");
+//		
+//		for(int idx = 0; idx < count; ++idx)
+//		{
+//			IFeatureExtractor extractor = extractors.getExtractor(idx);
+//			String description = extractors.getDescription(idx);
+//			double feature = extractor.extract(getGlyph());
+//			System.out.printf("%s\n\t%f\n", description, feature);
+//		}
+//		
+//		System.out.println("----------------");
+//	}
 	
-	public void randomizeGlyph()
-	{
-		glyph.randomizeEdges();
-		printFeatures();
-		repaint();
-	}
-	
-	public void mutateGlyph()
-	{
-		glyph.mutate();
-		printFeatures();
-		repaint();
-	}
+//	public void randomizeGlyph()
+//	{
+//		glyph.randomizeEdges();
+//		printFeatures();
+//		repaint();
+//	}
+//	
+//	public void mutateGlyph()
+//	{
+//		glyph.mutate();
+//		printFeatures();
+//		repaint();
+//	}
 	
 	private void findNewGlyph()
 	{	
 		visited.add(glyph.clone());
 		
-		Glyph backup = glyph.clone();
+//		evolver.init(filter);
 		
-		while(visited.contains(glyph))
-		{
-			int attempts = 0;
-			
-			do
-			{
-				glyph = backup.clone();
-				glyph.mutate();
-				
-				if(attempts++ > 100)
-				{
-					attempts = 0;
-					backup.randomizeEdges();
-				}
-								
-			} while(!filter.doesPass(glyph));
-		}
+		evolver.init(filter.getEvaluator());
+		evolver.evolve();
+		
+		glyph = evolver.getChampion().glyph;
+		
+		
+//		Glyph backup = glyph.clone();
+//		
+//		while(visited.contains(glyph))
+//		{
+//			int attempts = 0;
+//			
+//			do
+//			{
+//				glyph = backup.clone();
+//				glyph.mutate();
+//				
+//				if(attempts++ > 100)
+//				{
+//					attempts = 0;
+//					backup.randomizeEdges();
+//				}
+//								
+//			} while(!filter.doesPass(glyph));
+//		}
 				
 //		System.out.println();
 		
@@ -234,7 +250,6 @@ public class GlyphPanel  extends JComponent
 //		System.out.println("PASS");
 		filter.update(glyph, true);
 		findNewGlyph();
-		
 	}
 
 	public void failGlyph() {
@@ -243,13 +258,13 @@ public class GlyphPanel  extends JComponent
 		findNewGlyph();
 	}
 
-	public void crossGlyph(GlyphPanel that) {
-		Glyph thisGlyph = this.glyph;
-		Glyph thatGlyph = that.glyph;
-		
-		thisGlyph.crossWith(thatGlyph);
-		
-		this.repaint();
-		that.repaint();
-	}
+//	public void crossGlyph(GlyphPanel that) {
+//		Glyph thisGlyph = this.glyph;
+//		Glyph thatGlyph = that.glyph;
+//		
+//		thisGlyph.crossWith(thatGlyph);
+//		
+//		this.repaint();
+//		that.repaint();
+//	}
 }
