@@ -17,7 +17,6 @@ import dk.itu.jglyph.Filter;
 import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.Node;
 import dk.itu.jglyph.evolution.GlyphEvolver;
-import dk.itu.jglyph.evolution.Subject;
 
 public class GlyphPanel  extends JComponent
 {
