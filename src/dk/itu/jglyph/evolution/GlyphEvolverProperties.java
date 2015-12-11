@@ -4,11 +4,11 @@ import java.io.IOException;
 
 import com.anji.util.Properties;
 
-public class GlyphProperties 
+public class GlyphEvolverProperties 
 {
 	private Properties properties;
 	
-	public GlyphProperties(String resource)
+	public GlyphEvolverProperties(String resource)
 	{
 		try {
 			properties = new Properties(resource);

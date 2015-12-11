@@ -47,7 +47,7 @@ public class GlyphEvolver
 	
 	public GlyphEvolver(Evaluator evaluator)
 	{
-		GlyphProperties properties = new GlyphProperties("glyph.properties");
+		GlyphEvolverProperties properties = new GlyphEvolverProperties("glyph.properties");
 		
 		populationSize = properties.tryGetInt("popul.size", DEFAULT_POPULATION_SIZE);
 		numberOfGenerations = properties.tryGetInt("num.generations", DEFAULT_NUMBER_OF_GENERATIONS);
