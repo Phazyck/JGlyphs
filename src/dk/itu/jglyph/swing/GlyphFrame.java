@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.TreeSet;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -42,9 +41,9 @@ public class GlyphFrame extends JFrame
 	
 	private GlyphEvolver evolver;
 
-	private final static double PROBABILITY_REVISIT = 0.4;
+	private static final int MAX_TEST_COUNT = 3;
 	
-	private TreeSet<Subject> population;
+	private ArrayList<Glyph> population;
 	
 	public GlyphFrame()
 	{
@@ -92,60 +91,43 @@ public class GlyphFrame extends JFrame
 			}
 		});
 		
+		population = new ArrayList<Glyph>();
+		
+		for (int i = 0; i < MAX_TEST_COUNT; i++) {
+			population.add(evolver.randomGlyph());
+		}
+		
 		updateGlyphs();
 	}
 	
 	private void updateGlyphs()
 	{
 		// TODO Make sure they are not the same
-		Glyph first, second;
+		Glyph first;
 		if (visited.size() == 0) {
-			// TODO initialize population random and pick from that
-			first = randomGlyph();
+			// We use a new glyph if there is no old glyphs
+			first = findNewGlyph();
 		}
 		else first = findOldGlyph();
 		glyphPanelLeft.setGlyph(first);
 		glyphPanelRight.setGlyph(findNewGlyph());
 	}
 	
-	private Glyph randomGlyph() {
-		Glyph g = evolver.randomGlyph();
-		visited.add(g);
-		return g;
-	}
-	
 	private Glyph findOldGlyph()
 	{
+		// TODO Pick from model to improve new layout
 		Glyph[] glyphs = visited.toArray(new Glyph[visited.size()]);
 		return glyphs[Random.getInt(glyphs.length)];
 	}
 	
 	private Glyph findNewGlyph()
 	{
-		updatePopulation();
-		
 		Glyph glyph = null;
-		
-		ArrayList<Glyph> glyphs = new ArrayList<>();
-		
-		while(population.size() > 0)
-		{
-			Subject subject = population.pollFirst();
-			
-			glyphs.add(glyph);
-			if(!visited.contains(glyph))
-			{
-				glyph = subject.glyph;
-				break;
-			}
-		}
-		
-		// If we didn't find a glyph on the first traversal, pick a random one.
-		if(glyph == null)
-		{
-			int index = Random.getInt(glyphs.size());
-			glyph = glyphs.get(index);
-		}
+		if (population.size() == 0) updatePopulation();
+		do {
+			glyph = population.remove(population.size()-1);
+			if (population.size() == 0) glyph = evolver.randomGlyph();
+		} while (visited.contains(glyph));
 		
 		visited.add(glyph.clone());
 		
@@ -153,11 +135,17 @@ public class GlyphFrame extends JFrame
 	}
 	
 	private void updatePopulation() {
-		// TODO only copy elite and keep evolution alive
-		evolver.init(filter.getEvaluator());
+		// TODO keep evolution alive
+		//evolver.init(filter.getEvaluator());
+		evolver.setEvaluator(filter.getEvaluator());
 		evolver.evolve();
 		
-		population = evolver.clonePopulation();
+		population = new ArrayList<Glyph>();
+		int count = MAX_TEST_COUNT;
+		for (Subject subject : evolver.clonePopulation()) {
+			population.add(subject.glyph);
+			if (count-- == 0) break;
+		}
 	}
 	
 //	private void findNewGlyph(GlyphPanel panel)

@@ -88,6 +88,10 @@ public class GlyphEvolver
 		}
 	}
 	
+	public void setEvaluator(Evaluator evaluator) {
+		this.evaluator = evaluator;
+	}
+	
 	public Glyph randomGlyph()
 	{
 		Glyph glyph = new Glyph(glyphWidth, glyphHeight);
@@ -145,6 +149,8 @@ public class GlyphEvolver
 				subjects[idx++] = subject;
 			}
 			
+			// TODO We could add new random nodes to keep diversity as we update the fitness function
+			
 			int top = (int)(length * bestSurvivorRate);
 			int bottom = subjects.length - top;
 			
@@ -153,6 +159,12 @@ public class GlyphEvolver
 			int survivors = (int)(length * totalSuvirvorRate);
 			
 			breedChildren(subjects, survivors);
+			
+			// We need to remember to add the new subjects to population
+			population.clear();
+			for (Subject subject : subjects) {
+				population.add(subject);
+			}
 		}
 	}
 	

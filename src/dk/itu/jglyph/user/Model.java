@@ -76,8 +76,6 @@ public class Model
 	{
 		int count = nodes.size();
 		
-		FeatureExtractors extractors = FeatureExtractors.getInstance();
-		
 		if(count < 1)
 		{
 			// NEAT needs at least one stim/target pair, so feed with dummy for starters
