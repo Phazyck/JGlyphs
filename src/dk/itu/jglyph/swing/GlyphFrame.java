@@ -34,6 +34,7 @@ public class GlyphFrame extends JFrame
 	
 	private GlyphPanel glyphPanelLeft;
 	private GlyphPanel glyphPanelRight;
+	private GlyphShower glyphShower;
 	
 	private Filter filter;
 	
@@ -61,6 +62,20 @@ public class GlyphFrame extends JFrame
 		
 		addGlyphs(panelCenter);
 //		addButtons(panelSouth);
+		
+		
+
+    	glyphShower = new GlyphShower();
+    	glyphShower.setVisible(true);
+		
+		/*EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+            	glyphShower = new GlyphShower();
+//        		SwingUtilities.updateComponentTreeUI(frame);
+            	glyphShower.setVisible(true);
+            }
+        });*/
 		
 		setTitle(FRAME_TITLE);
 		
@@ -136,16 +151,18 @@ public class GlyphFrame extends JFrame
 	
 	private void updatePopulation() {
 		// TODO keep evolution alive
-		//evolver.init(filter.getEvaluator());
-		evolver.setEvaluator(filter.getEvaluator());
+		evolver.init(filter.getEvaluator());
+		//evolver.setEvaluator(filter.getEvaluator());
 		evolver.evolve();
 		
 		population = new ArrayList<Glyph>();
-		int count = MAX_TEST_COUNT;
+		int count = Math.max(MAX_TEST_COUNT, GlyphShower.MAX_COUNT);
 		for (Subject subject : evolver.clonePopulation()) {
 			population.add(subject.glyph);
 			if (count-- == 0) break;
 		}
+		glyphShower.setGlyphs(population);
+		while (population.size() > MAX_TEST_COUNT) population.remove(MAX_TEST_COUNT);
 	}
 	
 //	private void findNewGlyph(GlyphPanel panel)
