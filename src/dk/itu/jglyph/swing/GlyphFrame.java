@@ -44,6 +44,8 @@ public class GlyphFrame extends JFrame
 
 	private final static double PROBABILITY_REVISIT = 0.4;
 	
+	private TreeSet<Subject> population;
+	
 	public GlyphFrame()
 	{
 		filter = new Filter();
@@ -96,58 +98,66 @@ public class GlyphFrame extends JFrame
 	private void updateGlyphs()
 	{
 		// TODO Make sure they are not the same
-		glyphPanelLeft.setGlyph(findNewGlyph());
+		Glyph first, second;
+		if (visited.size() == 0) {
+			// TODO initialize population random and pick from that
+			first = randomGlyph();
+		}
+		else first = findOldGlyph();
+		glyphPanelLeft.setGlyph(first);
 		glyphPanelRight.setGlyph(findNewGlyph());
+	}
+	
+	private Glyph randomGlyph() {
+		Glyph g = evolver.randomGlyph();
+		visited.add(g);
+		return g;
+	}
+	
+	private Glyph findOldGlyph()
+	{
+		Glyph[] glyphs = visited.toArray(new Glyph[visited.size()]);
+		return glyphs[Random.getInt(glyphs.length)];
 	}
 	
 	private Glyph findNewGlyph()
 	{
-		boolean revisit = Random.getBoolean(PROBABILITY_REVISIT);
+		updatePopulation();
 		
 		Glyph glyph = null;
 		
-		if(revisit && visited.size() != 0)
+		ArrayList<Glyph> glyphs = new ArrayList<>();
+		
+		while(population.size() > 0)
 		{
-			Glyph[] glyphs = new Glyph[visited.size()];
-			glyphs = visited.toArray(glyphs);
+			Subject subject = population.pollFirst();
 			
-			int index = Random.getInt(glyphs.length);
-			glyph = glyphs[index];
-		}
-		else
-		{
-			evolver.init(filter.getEvaluator());
-			evolver.evolve();
-			
-			
-			
-			TreeSet<Subject> population = evolver.clonePopulation();
-			
-			ArrayList<Glyph> glyphs = new ArrayList<>();
-			
-			while(population.size() > 0)
+			glyphs.add(glyph);
+			if(!visited.contains(glyph))
 			{
-				Subject subject = population.pollFirst();
-				
-				glyphs.add(glyph);
-				if(!visited.contains(glyph))
-				{
-					glyph = subject.glyph;
-					break;
-				}
+				glyph = subject.glyph;
+				break;
 			}
-			
-			// If we didn't find a glyph on the first traversal, pick a random one.
-			if(glyph == null)
-			{
-				int index = Random.getInt(glyphs.size());
-				glyph = glyphs.get(index);
-			}
-			
-			visited.add(glyph.clone());
 		}
 		
+		// If we didn't find a glyph on the first traversal, pick a random one.
+		if(glyph == null)
+		{
+			int index = Random.getInt(glyphs.size());
+			glyph = glyphs.get(index);
+		}
+		
+		visited.add(glyph.clone());
+		
 		return(glyph);
+	}
+	
+	private void updatePopulation() {
+		// TODO only copy elite and keep evolution alive
+		evolver.init(filter.getEvaluator());
+		evolver.evolve();
+		
+		population = evolver.clonePopulation();
 	}
 	
 //	private void findNewGlyph(GlyphPanel panel)
