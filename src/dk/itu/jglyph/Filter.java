@@ -28,8 +28,6 @@ public class Filter {
 	}
 	
 	public Filter() {
-		// TODO take care of everything (get it set up in default state)
-		
 		model = new Model();
 		
 		// properties file object
@@ -58,8 +56,6 @@ public class Filter {
 	private boolean evolving = false;
 	
 	public void update(Glyph better, Glyph worse) {
-		//TODO only re-evolve after X new classifications added, instead of every time
-		
 		model.addRelation(better, worse);
 		
 		if(!evolving)
