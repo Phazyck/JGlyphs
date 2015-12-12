@@ -83,11 +83,16 @@ public class GlyphEvolver
 		
 		while(population.size() < populationSize)
 		{
-			Glyph glyph = new Glyph(glyphWidth, glyphHeight);
-			glyph.randomizeEdges();
-			Subject subject = makeSubject(glyph);
+			Subject subject = makeSubject(randomGlyph());
 			population.add(subject);
 		}
+	}
+	
+	public Glyph randomGlyph()
+	{
+		Glyph glyph = new Glyph(glyphWidth, glyphHeight);
+		glyph.randomizeEdges();
+		return glyph;
 	}
 	
 	private double getFitness(Glyph glyph)
