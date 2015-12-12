@@ -10,11 +10,13 @@ public class Node
 {
 	public final Glyph glyph;
 	private HashSet<Node> children;
+	public HashSet<Node> parents;
 	
 	public Node(Glyph glyph)
 	{
 		this.glyph = glyph;
 		this.children = new HashSet<>();
+		this.parents = new HashSet<>();
 	}
 	
 	public void addChild(Node node)
@@ -25,6 +27,7 @@ public class Node
 		}
 		
 		children.add(node);
+		node.parents.add(this);
 	}
 	
 	public boolean hasChild(Node node)

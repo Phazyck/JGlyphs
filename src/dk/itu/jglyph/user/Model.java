@@ -2,6 +2,7 @@ package dk.itu.jglyph.user;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,18 +26,53 @@ public class Model
 		if(nodeBetter == null)
 		{
 			nodeBetter = new Node(better);
+			nodes.put(better, nodeBetter);
 		}
 		
 		Node nodeWorse = nodes.get(worse);
 		if(nodeWorse == null)
 		{
 			nodeWorse = new Node(worse);
+			nodes.put(worse, nodeWorse);
 		}
 		
 		nodeBetter.addChild(nodeWorse);
 	}
 	
-	public List<StimulusTargetPair> getTrainingSet()
+	public List<StimulusTargetPair> getTrainingSetLevel()
+	{
+		if (nodes.isEmpty()) return getDummyTrainingSet();
+		
+		HashSet<Node> used = new HashSet<Node>();
+		List<List<Node>> levels = new ArrayList<List<Node>>();
+		while (used.size() != nodes.size()) {
+			List<Node> currentLevel = new ArrayList<Node>();
+			levels.add(currentLevel);
+			for (Node node : nodes.values()) {
+				// any parents that are not in used is a parent we need to label skip it so we can take the parent first
+				if (used.contains(node) || !used.containsAll(node.parents)) continue;
+				currentLevel.add(node);
+			}
+			used.addAll(currentLevel);
+		}
+		
+		List<StimulusTargetPair> data = new ArrayList<>();
+		
+		double maxLvl = levels.size() - 1;
+		int lvl = levels.size() - 1;
+		for (List<Node> level : levels) {
+			for (Node node : level) {
+				double[] stimulus = FeatureExtractors.getInstance().extractFeatures(node.glyph);
+				double[] target = new double[]{lvl/maxLvl};
+				data.add(new StimulusTargetPair(stimulus, target));
+			}
+			lvl--;
+		}
+		
+		return data;
+	}
+	
+	public List<StimulusTargetPair> getTrainingSetChildCount()
 	{
 		int count = nodes.size();
 		
@@ -45,14 +81,7 @@ public class Model
 		if(count < 1)
 		{
 			// NEAT needs at least one stim/target pair, so feed with dummy for starters
-			List<StimulusTargetPair> data = new LinkedList<>();
-			
-			double[] stimulus = new double[extractors.count()];
-			double[] target = new double[]{0};
-			StimulusTargetPair pair = new StimulusTargetPair(stimulus, target);
-			data.add(pair);
-
-			return(data);	
+			return getDummyTrainingSet();
 		}
 		
 		Node[] values = new Node[count]; 
@@ -87,6 +116,17 @@ public class Model
 		}
 
 		return(data);	
+	}
+	
+	private static List<StimulusTargetPair> getDummyTrainingSet()
+	{
+		List<StimulusTargetPair> data = new LinkedList<>();
+		
+		double[] stimulus = new double[FeatureExtractors.getInstance().count()];
+		double[] target = new double[]{0};
+		StimulusTargetPair pair = new StimulusTargetPair(stimulus, target);
+		data.add(pair);
+		return data;
 	}
 
 }

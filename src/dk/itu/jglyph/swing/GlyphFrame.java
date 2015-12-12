@@ -95,6 +95,7 @@ public class GlyphFrame extends JFrame
 	
 	private void updateGlyphs()
 	{
+		// TODO Make sure they are not the same
 		glyphPanelLeft.setGlyph(findNewGlyph());
 		glyphPanelRight.setGlyph(findNewGlyph());
 	}
@@ -105,7 +106,7 @@ public class GlyphFrame extends JFrame
 		
 		Glyph glyph = null;
 		
-		if(revisit)
+		if(revisit && visited.size() != 0)
 		{
 			Glyph[] glyphs = new Glyph[visited.size()];
 			glyphs = visited.toArray(glyphs);

@@ -25,10 +25,12 @@ public class Evaluator
 		return response[0];
 	}
 	
+	/* pass is always false so this doesnt work as is
 	public boolean doesPass(Glyph glyph) {
 		
 		double fitness = evaluate(glyph);
 		
+		// WTF IS THIS???
 		boolean pass = fitness + Double.MIN_VALUE >= threshhold;
 		
 		if(pass)
@@ -41,5 +43,5 @@ public class Evaluator
 		}
 		
 		return(pass);
-	}
+	}*/
 }

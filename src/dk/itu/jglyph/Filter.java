@@ -50,7 +50,7 @@ public class Filter {
 	
 	private void evolveEvalutor()
 	{
-		List<StimulusTargetPair> data = model.getTrainingSet();
+		List<StimulusTargetPair> data = model.getTrainingSetLevel();
 		Activator network = NeatUtil.doEvolution(data, properties);
 		evaluator = new Evaluator(network);
 	}
