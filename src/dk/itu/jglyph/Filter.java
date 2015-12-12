@@ -28,8 +28,6 @@ public class Filter {
 	}
 	
 	public Filter() {
-		// TODO take care of everything (get it set up in default state)
-		
 		model = new Model();
 		
 		// properties file object
@@ -50,16 +48,17 @@ public class Filter {
 	
 	private void evolveEvalutor()
 	{
-		List<StimulusTargetPair> data = model.getTrainingSetLevel();
-		Activator network = NeatUtil.doEvolution(data, properties);
+		if (model.isEmpty()) {
+			evaluator = new Evaluator(null); // TODO get this hack out of the way
+			return; // Nothing to evolve upon yet
+		}
+		Activator network = NeatUtil.doEvolution(model, properties);
 		evaluator = new Evaluator(network);
 	}
 	
 	private boolean evolving = false;
 	
 	public void update(Glyph better, Glyph worse) {
-		//TODO only re-evolve after X new classifications added, instead of every time
-		
 		model.addRelation(better, worse);
 		
 		if(!evolving)

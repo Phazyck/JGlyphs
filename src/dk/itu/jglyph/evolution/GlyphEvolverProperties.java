@@ -34,7 +34,7 @@ public class GlyphEvolverProperties
 	{
 		if(properties == null)
 		{
-			
+			// TODO wtf just happened here? - Kas
 		}
 		
 		key = fixKey(key);

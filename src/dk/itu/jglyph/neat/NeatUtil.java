@@ -7,27 +7,15 @@ import com.anji.integration.ActivatorTranscriber;
 import com.anji.neat.Evolver;
 import com.anji.util.Properties;
 
+import dk.itu.jglyph.user.Model;
+
 public class NeatUtil {
 	
 	// Values for loading neural networks
 	private final static String TRANSCRIBER_CLASS_KEY = "glyph.transcriber";
 	
-	public static Activator doEvolution(List<StimulusTargetPair> trainingData, Properties properties) {
-		// set TrainingSet.stimuli/values
-		int count = trainingData.size();
-		
-		double[][] stimuli = new double[count][];
-		double[][] targets = new double[count][];
-		
-		for (int i = 0; i < count; i++) {
-			StimulusTargetPair stp = trainingData.get(i);
-			
-			stimuli[i] = stp.stimulus;
-			targets[i] = stp.target;
-		}
-		
-		TrainingSet.stimuli = stimuli;
-		TrainingSet.targets = targets;
+	public static Activator doEvolution(Model model, Properties properties) {
+		TrainingSet.model = model;
 		
 		// Evolve new network
 		

@@ -127,4 +127,12 @@ public class Model
 		return data;
 	}
 
+	public Iterable<Node> getNodes() {
+		return nodes.values();
+	}
+
+	public boolean isEmpty() {
+		return nodes.isEmpty();
+	}
+
 }

@@ -17,7 +17,8 @@ public class Evaluator
 	private double threshhold = 1f;
 	
 	public double evaluate(Glyph glyph) {
-		//TODO eval glyph using NN from ANJI
+		if (network == null) return 1.0; // TODO dunno if this is a good idea
+		
 		double[] stimulus = FeatureExtractors.getInstance().extractFeatures(glyph);
 		
 		double[] response =  network.next(stimulus);
