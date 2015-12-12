@@ -15,7 +15,7 @@ public class NeatUtil {
 	private final static String TRANSCRIBER_CLASS_KEY = "glyph.transcriber";
 	
 	public static Activator doEvolution(Model model, Properties properties) {
-		TrainingSet.model = model;
+		TrainingSet.model = new Model(model);
 		
 		// Evolve new network
 		

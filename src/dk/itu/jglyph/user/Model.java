@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.features.FeatureExtractors;
@@ -18,6 +19,18 @@ public class Model
 	public Model()
 	{
 		nodes = new HashMap<>();
+	}
+	
+	/**
+	 * Deep copy constructor
+	 */
+	public Model(Model other)
+	{
+		nodes = new HashMap<>();
+		
+		for (Entry<Glyph, Node> entry : other.nodes.entrySet()) {
+			nodes.put(entry.getKey(), entry.getValue());
+		}
 	}
 	
 	public void addRelation(Glyph better, Glyph worse)
