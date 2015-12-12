@@ -48,8 +48,11 @@ public class Filter {
 	
 	private void evolveEvalutor()
 	{
-		List<StimulusTargetPair> data = model.getTrainingSetLevel();
-		Activator network = NeatUtil.doEvolution(data, properties);
+		if (model.isEmpty()) {
+			evaluator = new Evaluator(null); // TODO get this hack out of the way
+			return; // Nothing to evolve upon yet
+		}
+		Activator network = NeatUtil.doEvolution(model, properties);
 		evaluator = new Evaluator(network);
 	}
 	

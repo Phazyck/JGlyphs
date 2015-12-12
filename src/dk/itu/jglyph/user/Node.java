@@ -67,6 +67,10 @@ public class Node
 		return(count);
 	}
 	
+	public Iterable<Node> getChildren() {
+		return children;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
