@@ -83,12 +83,14 @@ public class GlyphShower extends JFrame
 				@Override public void mouseReleased(MouseEvent e) {
 					if (e.getButton() == MouseEvent.BUTTON3) {
 						System.out.println("Mutating");
-						glyphPanels[t].getGlyph().mutate();
-						glyphPanels[t].repaint();
+						Glyph g = glyphPanels[t].getGlyph().clone();
+						g.mutate();
+						glyphPanels[t].setGlyph(g);
 					} else if (e.getButton() == MouseEvent.BUTTON2) {
 						System.out.println("Random");
-						glyphPanels[t].getGlyph().randomizeEdges();
-						glyphPanels[t].repaint();
+						Glyph g = glyphPanels[t].getGlyph().clone();
+						g.randomizeEdges();
+						glyphPanels[t].setGlyph(g);
 					}
 					System.out.println("Panel " + t + " has fitness: " + filter.getEvaluator().evaluate(glyphPanels[t].getGlyph()));
 				}
