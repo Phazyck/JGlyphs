@@ -156,7 +156,7 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 				}
 				double span = max - min;
 				double maxSpan = maxResponse - minResponse ;
-				double avg = ( sum / scores.size() - minResponse ) / maxResponse ;
+				double avg = ( sum / scores.size() - minResponse ) / maxSpan ;
 				double ratio = (1 - Math.abs(0.5-avg)) * span/maxSpan;
 				
 				fitness = (int) (fitness * ratio);
@@ -200,12 +200,12 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 				false );
 		double maxRawFitnessValue = Math.pow( maxSumDiff, 2 );
 
-		double sumDiff = 0.0;
+		double sumDiff = 0;
 		for (double d : diffs) {
 			sumDiff += d;
 		}
 
-		if ( sumDiff > maxSumDiff )
+		if ( sumDiff > maxSumDiff + .00000001 )
 			throw new IllegalStateException( "sum diff > max sum diff" );
 		
 		double rawFitnessValue = Math.pow( maxSumDiff - sumDiff, 2 );
