@@ -65,7 +65,7 @@ public class GlyphFrame extends JFrame
 		
 		
 
-    	glyphShower = new GlyphShower();
+    	glyphShower = new GlyphShower(filter);
     	glyphShower.setVisible(true);
 		
 		/*EventQueue.invokeLater(new Runnable() {

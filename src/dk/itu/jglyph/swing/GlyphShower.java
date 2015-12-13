@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import dk.itu.jglyph.Evaluator;
 import dk.itu.jglyph.Filter;
 import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.evolution.GlyphEvolver;
@@ -36,8 +37,11 @@ public class GlyphShower extends JFrame
 	
 	private GlyphPanel[] glyphPanels;
 	
-	public GlyphShower()
+	private Filter filter;
+	
+	public GlyphShower(Filter filter)
 	{
+		this.filter = filter;
 		setLayout(new BorderLayout());
 		
 		JPanel panelCenter = new JPanel();
@@ -46,7 +50,7 @@ public class GlyphShower extends JFrame
 //		JPanel panelSouth = new JPanel();
 //		add(panelSouth, BorderLayout.SOUTH);
 		
-		addGlyphs(panelCenter);
+		addGlyphPanels(panelCenter);
 		
 		setTitle(FRAME_TITLE);
 		
@@ -59,7 +63,7 @@ public class GlyphShower extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	private void addGlyphs(Container container)
+	private void addGlyphPanels(Container container)
 	{
 		GridLayout gridLayout = new GridLayout(2, 0);
 		container.setLayout(gridLayout);
@@ -69,6 +73,26 @@ public class GlyphShower extends JFrame
 		for (int i = 0; i < glyphPanels.length; i++) {
 			glyphPanels[i] = new GlyphPanel();
 			container.add(glyphPanels[i]);
+			
+			final int t = i;
+			glyphPanels[i].addMouseListener(new MouseListener() {
+				@Override public void mousePressed(MouseEvent e) { }
+				@Override public void mouseExited(MouseEvent e) { }
+				@Override public void mouseEntered(MouseEvent e) { }
+				@Override public void mouseClicked(MouseEvent e) { }
+				@Override public void mouseReleased(MouseEvent e) {
+					if (e.getButton() == MouseEvent.BUTTON3) {
+						System.out.println("Mutating");
+						glyphPanels[t].getGlyph().mutate();
+						glyphPanels[t].repaint();
+					} else if (e.getButton() == MouseEvent.BUTTON2) {
+						System.out.println("Random");
+						glyphPanels[t].getGlyph().randomizeEdges();
+						glyphPanels[t].repaint();
+					}
+					System.out.println("Panel " + t + " has fitness: " + filter.getEvaluator().evaluate(glyphPanels[t].getGlyph()));
+				}
+			});
 		}
 	}
 	

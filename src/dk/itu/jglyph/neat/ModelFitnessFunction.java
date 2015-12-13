@@ -40,6 +40,8 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 
 	private final static String ADJUST_FOR_NETWORK_SIZE_FACTOR_KEY = "fitness.function.adjust.for.network.size.factor";
 //	private final static String MINIMUM_DIFFERENCE_KEY = "glyph.fitness.minimum.difference";
+
+	private static final double MIN_DELTA = Double.MIN_VALUE;
 	
 	
 
@@ -117,16 +119,37 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 
 				// TODO grab all edges and end with an array of response-diffs and targets
 				List<Double> diffs = new ArrayList<>();
+				List<Double> scores = new ArrayList<>();
 
 				for (Node parent : model.getNodes()) {
 					for (Node child : parent.getChildren()) {
 						diffs.add(getErrorDifference(activator, parent.glyph, child.glyph));
 					}
+					double[] parentStimulus = FeatureExtractors.getInstance().extractFeatures(parent.glyph);
+					scores.add(activator.next(parentStimulus)[0]);
 				}
 				
-				chromosome.setFitnessValue( calculateErrorFitness( diffs, activator.getMinResponse(),
+				int fitness = calculateErrorFitness( diffs, activator.getMinResponse(),
 						activator.getMaxResponse() )
-						- (int) ( adjustForNetworkSizeFactor * chromosome.size() ) );
+						- (int) ( adjustForNetworkSizeFactor * chromosome.size() );
+				
+				// Calculating how well it exploits the fitness spectrum
+				double sum = 0;
+				double max = -Double.MAX_VALUE;
+				double min = Double.MAX_VALUE;
+				for (Double d : scores) {
+					sum += d;
+					if (d > max) max = d;
+					if (d < min) min = d;
+				}
+				double span = max - min;
+				double maxSpan = activator.getMaxResponse() - activator.getMinResponse();
+				double avg = ( sum / scores.size() - activator.getMinResponse() ) / activator.getMaxResponse();
+				double ratio = (1 - Math.abs(0.5-avg)) * span/maxSpan;
+				
+				fitness = (int) (fitness * ratio);
+				
+				chromosome.setFitnessValue( fitness );
 			}
 			catch ( TranscriberException e ) {
 				logger.warn( "transcriber error: " + e.getMessage() );
@@ -142,7 +165,7 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 		double parentScore = activator.next(parentStimulus)[0];
 		double childScore = activator.next(childStimulus)[0];
 		
-		double difference = (childScore + Double.MIN_VALUE) - parentScore; // Add epsilon to make sure they aren't equal
+		double difference = (childScore + MIN_DELTA) - parentScore; // Add epsilon to make sure they aren't equal
 		
 		return Math.max(difference, 0.0);
 	}
@@ -161,7 +184,7 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 
 		double maxSumDiff = getMaxError(
 				diffs.size(),
-				( maxResponse - minResponse ), 
+				( maxResponse - minResponse + MIN_DELTA ), 
 				false );
 		double maxRawFitnessValue = Math.pow( maxSumDiff, 2 );
 
