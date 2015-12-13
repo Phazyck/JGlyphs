@@ -156,7 +156,7 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 				}
 				double span = max - min;
 				double maxSpan = maxResponse - minResponse ;
-				double avg = ( sum / scores.size() - minResponse ) / maxResponse ;
+				double avg = ( sum / scores.size() - minResponse ) / maxSpan ;
 				double ratio = (1 - Math.abs(0.5-avg)) * span/maxSpan;
 				
 				fitness = (int) (fitness * ratio);
