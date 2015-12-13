@@ -97,10 +97,14 @@ public class GlyphFrame extends JFrame
 		Timer timer = new Timer(250, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				double leftValue = FeatureExtractors.dotCount(glyphPanelLeft.getGlyph());
-				double rightValue = FeatureExtractors.dotCount(glyphPanelRight.getGlyph());
+				double leftValue = FeatureExtractors.edgeCount(glyphPanelLeft.getGlyph());
+				double rightValue = FeatureExtractors.edgeCount(glyphPanelRight.getGlyph());
 				
-				if (leftValue >= rightValue) {
+				leftValue = Math.abs(leftValue - 3);
+				rightValue = Math.abs(rightValue - 3);
+				
+				
+				if (leftValue <= rightValue) {
 					pickLeft();
 				}
 				else pickRight();
@@ -143,20 +147,87 @@ public class GlyphFrame extends JFrame
 		
 	}
 	
+	boolean improveModel = false;
+	
 	private void updateGlyphs()
 	{
-		// TODO Make sure they are not the same
-		Glyph first;
-		if (visited.size() == 0) {
-			// We use a new glyph if there is no old glyphs
-			first = findNewGlyph();
+		if(!tryImproveModel())
+		{
+			// TODO Make sure they are not the same
+			Glyph first;
+			if (visited.size() == 0) {
+				// We use a new glyph if there is no old glyphs
+				first = findNewGlyph();
+			}
+			else
+			{
+				first = findOldGlyph();
+			}
+			glyphPanelLeft.setGlyph(first);
+			Glyph second = findNewGlyph();
+			glyphPanelRight.setGlyph(second);
 		}
-		else first = findOldGlyph();
-		glyphPanelLeft.setGlyph(first);
-		Glyph second = findNewGlyph();
-		glyphPanelRight.setGlyph(second);
 		
 		
+		improveModel = !improveModel;
+	}
+	
+	private boolean tryImproveModel()
+	{
+		if(!improveModel)
+		{
+			return false;
+		}
+		else
+		{
+			Node nodeA = null;
+			for(Node node : filter.getModel().getNodes())
+			{
+				if(node.parents.size() == 0)
+				{
+					nodeA = node;
+					break;
+				}
+			}
+			
+			if(nodeA == null)
+			{
+				return false;
+			}
+			
+			Node nodeB = null;
+			for(Node node : filter.getModel().getNodes())
+			{
+				if(node == nodeA)
+				{
+					continue;
+				}
+				if(node.hasChild(nodeA))
+				{
+					continue;
+				}
+				
+				if(nodeA.hasChild(node))
+				{
+					continue;
+				}
+				
+				nodeB = node;
+				break;
+				
+			}
+			
+			if(nodeB == null)
+			{
+				return false;
+			}
+			
+			glyphPanelLeft.setGlyph(nodeA.glyph);
+			
+			glyphPanelRight.setGlyph(nodeB.glyph);
+			
+			return true;
+		}
 	}
 	
 	private Glyph findOldGlyph()
@@ -187,13 +258,15 @@ public class GlyphFrame extends JFrame
 	{
 		Glyph glyph = null;
 		if (population.size() == 0) updatePopulation();
-		do {
+//		do 
+		{
 			if (population.size() == 0){
 				System.out.println("Ran out of evolved glyphs; new glyph is random...");
 				glyph = evolver.randomGlyph();
 			}
 			else glyph = population.remove(population.size()-1);
-		} while (visited.contains(glyph));
+		} 
+//		while (visited.contains(glyph));
 		
 		visited.add(glyph.clone());
 		
