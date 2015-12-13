@@ -1,7 +1,5 @@
 package dk.itu.jglyph.neat;
 
-import java.util.List;
-
 import com.anji.integration.Activator;
 import com.anji.integration.ActivatorTranscriber;
 import com.anji.neat.Evolver;
@@ -15,7 +13,7 @@ public class NeatUtil {
 	private final static String TRANSCRIBER_CLASS_KEY = "glyph.transcriber";
 	
 	public static Activator doEvolution(Model model, Properties properties) {
-		TrainingSet.model = new Model(model);
+		TrainingSet.model = model.clone();
 		
 		// Evolve new network
 		

@@ -83,6 +83,8 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 
 			// Read in model to grab relations from 
 			model = TrainingSet.model;
+			
+			setMaxFitnessValue(MAX_FITNESS);
 		}
 		catch ( Exception e ) {
 			throw new IllegalArgumentException( "invalid properties: " + e.getClass().toString() + ": "

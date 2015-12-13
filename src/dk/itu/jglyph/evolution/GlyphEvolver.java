@@ -68,11 +68,13 @@ public class GlyphEvolver
 		init(evaluator);
 	}
 	
-	public TreeSet<Subject> clonePopulation()
+	public Iterable<Subject> getPopulation()
 	{
-		TreeSet<Subject> clone = new TreeSet<Subject>(population);
+//		TreeSet<Subject> clone = new TreeSet<Subject>(population); // NOTE this is not a deep copy, if that's what you've assumed
+//		
+//		return(clone);
 		
-		return(clone);
+		return population;
 	}
 	
 	public void init(Evaluator evaluator)
@@ -124,17 +126,7 @@ public class GlyphEvolver
 	{
 		for(int generation = 0; generation < numberOfGenerations; ++generation)
 		{
-			Subject champion = getChampion();
-			
-			double bestFitness = champion.fitness;
-			double worstFitness = population.last().fitness;
-			
-			System.out.printf("Generation #%d\n", generation);
-			System.out.printf("Best fitness %f\n", bestFitness);
-			System.out.printf("Worst fitness %f\n", worstFitness);
-			System.out.println();
-			
-			if(champion.fitness >= fitnessTarget)
+			if(getChampion().fitness >= fitnessTarget)
 			{
 				break;
 			}
@@ -165,6 +157,16 @@ public class GlyphEvolver
 			for (Subject subject : subjects) {
 				population.add(subject);
 			}
+			
+			Subject champion = getChampion();
+			
+			double bestFitness = champion.fitness;
+			double worstFitness = population.last().fitness;
+			
+			System.out.printf("Generation #%d\n", generation);
+			System.out.printf("Best fitness %f\n", bestFitness);
+			System.out.printf("Worst fitness %f\n", worstFitness);
+			System.out.println();
 		}
 	}
 	

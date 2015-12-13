@@ -37,8 +37,10 @@ public class FeatureExtractors
 		
 		addExtractor((Glyph g) -> unitCount(g), "Unit count.");
 		addExtractor((Glyph g) -> edgeCount(g), "Edge count.");
-		
+
 		addExtractor((Glyph g) -> strokeEstimate(g), "Stroke count estimate.");
+		
+		addExtractor((Glyph g) -> dotCount(g), "Dot count.");
 	}
 	
 	private void addExtractor(IFeatureExtractor extractor, String description)
@@ -94,7 +96,7 @@ public class FeatureExtractors
 	public static double minAngle(Glyph glyph)
 	  {
 		  List<Double> angles = getAngles(glyph);
-		  if (angles.size() == 0) return Math.PI;
+		  if (angles.size() == 0) return Math.PI; // Why return non-zero if there's no angles? - Kas
 		  double min = Double.MAX_VALUE;
 		  for (Double d : angles) {
 			  if (d < min && d != 0) min = d; // TODO do we need to use epsilon for the last comparison?
@@ -400,6 +402,18 @@ public class FeatureExtractors
 		}
 		  
 		  return sum/count;
+	  }
+	  
+	  /** Amount of 'dots' */
+	  public static double dotCount(Glyph glyph) 
+	  {
+		  int sum = 0;
+		  for (Edge edge : glyph.getEdges()) {
+			if (edge.from.equals(edge.to)) {
+				sum++;
+			}
+		  }
+		  return sum;
 	  }
 	  
 	  private static double length(Edge edge) {

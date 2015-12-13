@@ -81,4 +81,8 @@ public class Filter {
 			worker.execute();			
 		}
 	}
+
+	public Model getModel() {
+		return model;
+	}
 }

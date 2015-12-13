@@ -7,7 +7,7 @@ import dk.itu.jglyph.features.FeatureExtractors;
 public class Evaluator 
 {
 	// Neural Network activation object
-	private Activator network;
+	private final Activator network;
 	
 	public Evaluator(Activator network)
 	{

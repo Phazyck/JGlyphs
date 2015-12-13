@@ -37,11 +37,10 @@ public class GlyphShower extends JFrame
 	
 	private GlyphPanel[] glyphPanels;
 	
-	private Filter filter;
+	private Evaluator evaluator;
 	
-	public GlyphShower(Filter filter)
+	public GlyphShower()
 	{
-		this.filter = filter;
 		setLayout(new BorderLayout());
 		
 		JPanel panelCenter = new JPanel();
@@ -90,18 +89,29 @@ public class GlyphShower extends JFrame
 						glyphPanels[t].getGlyph().randomizeEdges();
 						glyphPanels[t].repaint();
 					}
-					System.out.println("Panel " + t + " has fitness: " + filter.getEvaluator().evaluate(glyphPanels[t].getGlyph()));
+					System.out.println("Panel " + t + " has fitness: " + evaluator.evaluate(glyphPanels[t].getGlyph()));
 				}
 			});
 		}
 	}
 	
-	public void setGlyphs(List<Glyph> glyphs)
+	public void setGlyphs(List<Glyph> glyphs, Evaluator evaluator)
 	{
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("Fitness for this set of glyphs:\t" );
+		
 		for (int i = 0; i < glyphPanels.length; i++) {
 			Glyph g = null;
-			if (i < glyphs.size()) g = glyphs.get(i);
+			if (i < glyphs.size()) {
+				g = glyphs.get(i);
+				sb.append(evaluator.evaluate(glyphs.get(i)) + "\t");
+			}
 			glyphPanels[i].setGlyph(g);
 		}
+		
+		this.evaluator = evaluator;
+		
+		System.out.println(sb.toString());
 	}
 }

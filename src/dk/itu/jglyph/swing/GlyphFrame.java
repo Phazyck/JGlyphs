@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -14,11 +16,15 @@ import java.util.HashSet;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
+import dk.itu.jglyph.Evaluator;
 import dk.itu.jglyph.Filter;
 import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.evolution.GlyphEvolver;
 import dk.itu.jglyph.evolution.Subject;
+import dk.itu.jglyph.features.FeatureExtractors;
+import dk.itu.jglyph.user.Node;
 import dk.itu.jglyph.util.Random;
 
 public class GlyphFrame extends JFrame 
@@ -65,7 +71,7 @@ public class GlyphFrame extends JFrame
 		
 		
 
-    	glyphShower = new GlyphShower(filter);
+    	glyphShower = new GlyphShower();
     	glyphShower.setVisible(true);
 		
 		/*EventQueue.invokeLater(new Runnable() {
@@ -87,6 +93,22 @@ public class GlyphFrame extends JFrame
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		// Autopick timer
+		Timer timer = new Timer(250, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				double leftValue = FeatureExtractors.dotCount(glyphPanelLeft.getGlyph());
+				double rightValue = FeatureExtractors.dotCount(glyphPanelRight.getGlyph());
+				
+				
+				if (leftValue >= rightValue) {
+					pickLeft();
+				}
+				else pickRight();
+			}
+		});
+		timer.setRepeats(true);
+		
 		this.addKeyListener(new KeyListener() {
 			
 			@Override public void keyTyped(KeyEvent e) { }
@@ -100,6 +122,11 @@ public class GlyphFrame extends JFrame
 					case KeyEvent.VK_RIGHT: {
 						pickRight();
 					} break;
+					// Events for starting and stopping the autpick function
+					case KeyEvent.VK_P: {
+						if (timer.isRunning()) timer.stop();
+						else timer.start();
+					}
 					default: 
 						break;
 				}
@@ -113,6 +140,8 @@ public class GlyphFrame extends JFrame
 		}
 		
 		updateGlyphs();
+		
+		
 	}
 	
 	private void updateGlyphs()
@@ -125,14 +154,34 @@ public class GlyphFrame extends JFrame
 		}
 		else first = findOldGlyph();
 		glyphPanelLeft.setGlyph(first);
-		glyphPanelRight.setGlyph(findNewGlyph());
+		Glyph second = findNewGlyph();
+		glyphPanelRight.setGlyph(second);
+		
+		
 	}
 	
 	private Glyph findOldGlyph()
 	{
 		// TODO Pick from model to improve new layout
-		Glyph[] glyphs = visited.toArray(new Glyph[visited.size()]);
-		return glyphs[Random.getInt(glyphs.length)];
+		// TODO somehow pick something that maximises the amount of knowledge gained
+//		Glyph[] glyphs = visited.toArray(new Glyph[visited.size()]);
+//		return glyphs[Random.getInt(glyphs.length)];
+		
+		Glyph current = null;
+		int currentCount = Integer.MIN_VALUE;
+		
+		// Stupid heuristic: Pick most best node always
+		for (Node node : filter.getModel().getNodes()) {
+			// We want the top most. if it has parents, it's no good
+			if (!node.parents.isEmpty()) continue;
+			
+			if (node.countUniqueChildren() > currentCount) {
+				current = node.glyph;
+				currentCount = node.countUniqueChildren();
+			}
+		} 
+		
+		return current;
 	}
 	
 	private Glyph findNewGlyph()
@@ -140,8 +189,11 @@ public class GlyphFrame extends JFrame
 		Glyph glyph = null;
 		if (population.size() == 0) updatePopulation();
 		do {
-			glyph = population.remove(population.size()-1);
-			if (population.size() == 0) glyph = evolver.randomGlyph();
+			if (population.size() == 0){
+				System.out.println("Ran out of evolved glyphs; new glyph is random...");
+				glyph = evolver.randomGlyph();
+			}
+			else glyph = population.remove(population.size()-1);
 		} while (visited.contains(glyph));
 		
 		visited.add(glyph.clone());
@@ -150,18 +202,22 @@ public class GlyphFrame extends JFrame
 	}
 	
 	private void updatePopulation() {
+		Evaluator evaluator = filter.getEvaluator(); 
+		
 		// TODO keep evolution alive
-		evolver.init(filter.getEvaluator());
+		evolver.init(evaluator);
 		//evolver.setEvaluator(filter.getEvaluator());
 		evolver.evolve();
 		
 		population = new ArrayList<Glyph>();
+		
 		int count = Math.max(MAX_TEST_COUNT, GlyphShower.MAX_COUNT);
-		for (Subject subject : evolver.clonePopulation()) {
+		for (Subject subject : evolver.getPopulation()) {
 			population.add(subject.glyph);
 			if (count-- == 0) break;
 		}
-		glyphShower.setGlyphs(population);
+		
+		glyphShower.setGlyphs(population, evaluator);
 		while (population.size() > MAX_TEST_COUNT) population.remove(MAX_TEST_COUNT);
 	}
 	
@@ -231,7 +287,7 @@ public class GlyphFrame extends JFrame
 			@Override public void mouseEntered(MouseEvent e) { }
 			@Override public void mouseClicked(MouseEvent e) { }
 			@Override public void mouseReleased(MouseEvent e) {
-				System.out.println("Left panel clicked!");
+//				System.out.println("Left panel clicked!");
 				pickLeft();
 			}
 		});
@@ -243,7 +299,7 @@ public class GlyphFrame extends JFrame
 			@Override public void mouseEntered(MouseEvent e) { }
 			@Override public void mouseClicked(MouseEvent e) { }
 			@Override public void mouseReleased(MouseEvent e) {
-				System.out.println("Right panel clicked!");
+//				System.out.println("Right panel clicked!");
 				pickRight();
 			}
 		});

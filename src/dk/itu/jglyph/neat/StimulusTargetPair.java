@@ -1,5 +1,6 @@
 package dk.itu.jglyph.neat;
 
+@Deprecated
 public class StimulusTargetPair {
 	final double[] target;
 	final double[] stimulus;

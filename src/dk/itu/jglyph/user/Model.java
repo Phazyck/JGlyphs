@@ -21,16 +21,19 @@ public class Model
 		nodes = new HashMap<>();
 	}
 	
-	/**
-	 * Deep copy constructor
-	 */
-	public Model(Model other)
-	{
-		nodes = new HashMap<>();
+	// Makes a deep copy
+	public Model clone() {
+		// TODO someone confirm this works, please <3 - Kasra
 		
-		for (Entry<Glyph, Node> entry : other.nodes.entrySet()) {
-			nodes.put(entry.getKey(), entry.getValue());
+		Model result = new Model();
+		
+		for (Node parent : nodes.values()) {
+			for (Node child : parent.getChildren()) {
+				result.addRelation(parent.glyph, child.glyph);
+			}
 		}
+		
+		return result;
 	}
 	
 	public void addRelation(Glyph better, Glyph worse)
@@ -52,6 +55,7 @@ public class Model
 		nodeBetter.addChild(nodeWorse);
 	}
 	
+	@Deprecated
 	public List<StimulusTargetPair> getTrainingSetLevel()
 	{
 		if (nodes.isEmpty()) return getDummyTrainingSet();
@@ -85,6 +89,7 @@ public class Model
 		return data;
 	}
 	
+	@Deprecated
 	public List<StimulusTargetPair> getTrainingSetChildCount()
 	{
 		int count = nodes.size();
@@ -129,6 +134,7 @@ public class Model
 		return(data);	
 	}
 	
+	@Deprecated
 	private static List<StimulusTargetPair> getDummyTrainingSet()
 	{
 		List<StimulusTargetPair> data = new LinkedList<>();
