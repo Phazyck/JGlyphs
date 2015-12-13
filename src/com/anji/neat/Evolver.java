@@ -171,6 +171,17 @@ private static void usage() {
 	System.err.println( "usage: <cmd> <properties-file>" );
 }
 
+private double getAdjustedFitness(Chromosome chromosome)
+{
+	double adjustedFitness = chromosome.getFitnessValue();
+	if(maxFitness > 0)
+	{
+		adjustedFitness /= (double)maxFitness;
+	}
+	
+	return(adjustedFitness);
+}
+
 /**
  * Perform a single run.
  * 
@@ -185,8 +196,8 @@ public void run() throws Exception {
 	// initialize result data
 	int generationOfFirstSolution = -1;
 	champ = genotype.getFittestChromosome();
-	double adjustedFitness = ( maxFitness > 0 ? champ.getFitnessValue() / maxFitness : champ
-			.getFitnessValue() );
+	
+	double adjustedFitness = getAdjustedFitness(champ);
 
 	// generations
 	for ( int generation = 0; ( generation < numEvolutions && adjustedFitness < targetFitness ); ++generation ) {
@@ -199,8 +210,7 @@ public void run() throws Exception {
 
 		// result data
 		champ = genotype.getFittestChromosome();
-		adjustedFitness = ( maxFitness > 0 ? (double) champ.getFitnessValue() / maxFitness : champ
-				.getFitnessValue() );
+		adjustedFitness = getAdjustedFitness(champ);
 		if ( adjustedFitness >= thresholdFitness && generationOfFirstSolution == -1 )
 			generationOfFirstSolution = generation;
 
