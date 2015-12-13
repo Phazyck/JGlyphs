@@ -146,20 +146,20 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 						- (int) ( adjustForNetworkSizeFactor * chromosome.size() );
 				
 				// Calculating how well it exploits the fitness spectrum
-				double sum = 0;
-				double max = -Double.MAX_VALUE;
-				double min = Double.MAX_VALUE;
-				for (Double d : scores) {
-					sum += d;
-					if (d > max) max = d;
-					if (d < min) min = d;
-				}
-				double span = max - min;
-				double maxSpan = maxResponse - minResponse ;
-				double avg = ( sum / scores.size() - minResponse ) / maxSpan ;
-				double ratio = (1 - Math.abs(0.5-avg)) * span/maxSpan;
-				
-				fitness = (int) (fitness * ratio);
+//				double sum = 0;
+//				double max = -Double.MAX_VALUE;
+//				double min = Double.MAX_VALUE;
+//				for (Double d : scores) {
+//					sum += d;
+//					if (d > max) max = d;
+//					if (d < min) min = d;
+//				}
+//				double span = max - min;
+//				double maxSpan = maxResponse - minResponse ;
+//				double avg = ( sum / scores.size() - minResponse ) / maxSpan ;
+//				double ratio = (1 - Math.abs(0.5-avg)) * span/maxSpan;
+//				
+//				fitness = (int) (fitness * ratio);
 				
 				chromosome.setFitnessValue( fitness );
 			}
