@@ -126,10 +126,10 @@ public class GlyphEvolver
 	{
 		for(int generation = 0; generation < numberOfGenerations; ++generation)
 		{
-			if(getChampion().fitness >= fitnessTarget)
-			{
-				break;
-			}
+//			if(getChampion().fitness >= fitnessTarget)
+//			{
+//				break;
+//			}
 			
 			int length = population.size();
 			
@@ -158,16 +158,17 @@ public class GlyphEvolver
 				population.add(subject);
 			}
 			
-			Subject champion = getChampion();
 			
-			double bestFitness = champion.fitness;
-			double worstFitness = population.last().fitness;
-			
-			System.out.printf("Generation #%d\n", generation);
-			System.out.printf("Best fitness %f\n", bestFitness);
-			System.out.printf("Worst fitness %f\n", worstFitness);
-			System.out.println();
 		}
+		Subject champion = getChampion();
+
+		double bestFitness = champion.fitness;
+		double worstFitness = population.last().fitness;
+
+//		System.out.printf("Generation #%d\n", generation);
+		System.out.printf("Best fitness %f\n", bestFitness);
+		System.out.printf("Worst fitness %f\n", worstFitness);
+		System.out.println();
 	}
 	
 	private void breedChildren(Subject[] subjects, int survivors)

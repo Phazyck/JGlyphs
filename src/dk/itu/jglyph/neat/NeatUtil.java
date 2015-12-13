@@ -14,6 +14,7 @@ public class NeatUtil {
 	
 	public static Activator doEvolution(Model model, Properties properties) {
 		TrainingSet.model = model.clone();
+		System.out.println("Current # of relations:\t" + model.relationCount());
 		
 		// Evolve new network
 		

@@ -48,7 +48,7 @@ public class GlyphFrame extends JFrame
 	
 	private GlyphEvolver evolver;
 
-	private static final int MAX_TEST_COUNT = 3;
+	private static final int MAX_TEST_COUNT = 20;
 	
 	private ArrayList<Glyph> population;
 	
@@ -99,7 +99,6 @@ public class GlyphFrame extends JFrame
 			public void actionPerformed(ActionEvent e) {
 				double leftValue = FeatureExtractors.dotCount(glyphPanelLeft.getGlyph());
 				double rightValue = FeatureExtractors.dotCount(glyphPanelRight.getGlyph());
-				
 				
 				if (leftValue >= rightValue) {
 					pickLeft();
@@ -164,24 +163,24 @@ public class GlyphFrame extends JFrame
 	{
 		// TODO Pick from model to improve new layout
 		// TODO somehow pick something that maximises the amount of knowledge gained
-//		Glyph[] glyphs = visited.toArray(new Glyph[visited.size()]);
-//		return glyphs[Random.getInt(glyphs.length)];
+		Glyph[] glyphs = visited.toArray(new Glyph[visited.size()]);
+		return glyphs[Random.getInt(glyphs.length)];
 		
-		Glyph current = null;
-		int currentCount = Integer.MIN_VALUE;
-		
-		// Stupid heuristic: Pick most best node always
-		for (Node node : filter.getModel().getNodes()) {
-			// We want the top most. if it has parents, it's no good
-			if (!node.parents.isEmpty()) continue;
-			
-			if (node.countUniqueChildren() > currentCount) {
-				current = node.glyph;
-				currentCount = node.countUniqueChildren();
-			}
-		} 
-		
-		return current;
+//		Glyph current = null;
+//		int currentCount = Integer.MIN_VALUE;
+//		
+//		// Stupid heuristic: Pick most best node always
+//		for (Node node : filter.getModel().getNodes()) {
+//			// We want the top most. if it has parents, it's no good
+//			if (!node.parents.isEmpty()) continue;
+//			
+//			if (node.countUniqueChildren() > currentCount) {
+//				current = node.glyph;
+//				currentCount = node.countUniqueChildren();
+//			}
+//		} 
+//		
+//		return current;
 	}
 	
 	private Glyph findNewGlyph()

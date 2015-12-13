@@ -39,7 +39,7 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 	private static Logger logger = Logger.getLogger( ModelFitnessFunction.class );
 
 	private final static String ADJUST_FOR_NETWORK_SIZE_FACTOR_KEY = "fitness.function.adjust.for.network.size.factor";
-//	private final static String MINIMUM_DIFFERENCE_KEY = "glyph.fitness.minimum.difference";
+	private final static String MINIMUM_DIFFERENCE_KEY = "glyph.fitness.minimum.difference";
 
 	private static final double MIN_DELTA = Double.MIN_VALUE;
 	
@@ -59,6 +59,8 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 	private int stimuliCount;
 	private int responseCount;
 
+	private double minimumDifference;
+
 	/**
 	 * See <a href=" {@docRoot}/params.htm" target="anji_params">Parameter Details </a> for
 	 * specific property settings.
@@ -74,8 +76,8 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 			adjustForNetworkSizeFactor = props.getFloatProperty( ADJUST_FOR_NETWORK_SIZE_FACTOR_KEY,
 					0.0f );
 			
-//			minimumDifference = props.getDoubleProperty( MINIMUM_DIFFERENCE_KEY,
-//					0.1 );
+			minimumDifference = props.getDoubleProperty( MINIMUM_DIFFERENCE_KEY,
+					0.1 );
 
 			// Figure out sizes for stimlui/response layers
 			stimuliCount = props.getIntProperty("stimulus.size");
@@ -131,8 +133,16 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 					scores.add(activator.next(parentStimulus)[0]);
 				}
 				
-				int fitness = calculateErrorFitness( diffs, activator.getMinResponse(),
-						activator.getMaxResponse() )
+				double minResponse = Double.POSITIVE_INFINITY, maxResponse = Double.NEGATIVE_INFINITY; 
+				
+				for (Double d : scores) {
+					minResponse = Math.min(minResponse, d);
+					maxResponse = Math.max(maxResponse, d);
+				}
+				
+				
+				int fitness = calculateErrorFitness( diffs, minResponse,
+						maxResponse )
 						- (int) ( adjustForNetworkSizeFactor * chromosome.size() );
 				
 				// Calculating how well it exploits the fitness spectrum
@@ -145,8 +155,8 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 					if (d < min) min = d;
 				}
 				double span = max - min;
-				double maxSpan = activator.getMaxResponse() - activator.getMinResponse();
-				double avg = ( sum / scores.size() - activator.getMinResponse() ) / activator.getMaxResponse();
+				double maxSpan = maxResponse - minResponse ;
+				double avg = ( sum / scores.size() - minResponse ) / maxResponse ;
 				double ratio = (1 - Math.abs(0.5-avg)) * span/maxSpan;
 				
 				fitness = (int) (fitness * ratio);
@@ -167,7 +177,7 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 		double parentScore = activator.next(parentStimulus)[0];
 		double childScore = activator.next(childStimulus)[0];
 		
-		double difference = (childScore + MIN_DELTA) - parentScore; // Add epsilon to make sure they aren't equal
+		double difference = (childScore + minimumDifference) - parentScore; // Add epsilon to make sure they aren't equal
 		
 		return Math.max(difference, 0.0);
 	}
@@ -186,7 +196,7 @@ public class ModelFitnessFunction implements BulkFitnessFunction, Configurable {
 
 		double maxSumDiff = getMaxError(
 				diffs.size(),
-				( maxResponse - minResponse + MIN_DELTA ), 
+				( maxResponse - minResponse + minimumDifference ), 
 				false );
 		double maxRawFitnessValue = Math.pow( maxSumDiff, 2 );
 

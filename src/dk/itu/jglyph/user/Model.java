@@ -149,6 +149,18 @@ public class Model
 	public Iterable<Node> getNodes() {
 		return nodes.values();
 	}
+	
+	public int relationCount () {
+		int count = 0;
+		
+		for (Node parent : getNodes()) {
+			for (Node child : parent.getChildren()) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
 
 	public boolean isEmpty() {
 		return nodes.isEmpty();
