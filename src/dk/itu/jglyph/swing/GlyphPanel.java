@@ -125,7 +125,9 @@ public class GlyphPanel  extends JComponent
 			{
 				int r = 3;
 				int d = r * 2;
+				g2.setColor(Color.magenta);
 				g2.drawOval(x1 - r, y1 - r, d, d);
+				g2.setColor(Color.black);
 			}
 			
 			g2.drawLine(x1, y1, x2, y2);
