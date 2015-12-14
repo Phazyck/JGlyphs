@@ -241,7 +241,7 @@ public class GlyphFrame extends JFrame
 		} 
 		while (visited.contains(glyph));
 		
-		visited.add(glyph.clone());
+		visited.add(glyph.copy());
 		
 		return(glyph);
 	}

@@ -2,16 +2,38 @@ package dk.itu.jglyph;
 
 import java.util.Iterator;
 
+/**
+ * A collection of nodes.
+ * 
+ * Also provides cached meta-data about said nodes.
+ */
 public class Nodes implements Iterable<Node>
 {
+	/**
+	 * The nodes.
+	 */
 	private final Node[] nodes;
 	
+	/**
+	 * The possible edges between the nodes.
+	 */
 	private final Edge[][] edges;
 	
+	/**
+	 * The amount of nodes.
+	 */
 	public final int length;
 	
+	/**
+	 * The centroid node.
+	 */
 	public final Node centroid;
 	
+	/**
+	 * Constructs a Nodes objects from an array of nodes.
+	 * 
+	 * @param nodes The nodes.
+	 */
 	public Nodes(Node[] nodes)
 	{
 		this.nodes = nodes;
@@ -34,12 +56,25 @@ public class Nodes implements Iterable<Node>
 		edges = new Edge[length][length];
 	}
 	
+	/**
+	 * Gets a node from the nodes.
+	 * 
+	 * @param nodeIdx The index of the node.
+	 * @return The node.
+	 */
 	public Node getNode(int nodeIdx)
 	{
 		Node node = nodes[nodeIdx];
 		return(node);
 	}
 	
+	/**
+	 * Gets an edge from one node to another.
+	 * 
+	 * @param nodeIdxA The index of the first node.
+	 * @param nodeIdxB The index of the second node.
+	 * @return The edge.
+	 */
 	public Edge getEdge(int nodeIdxA, int nodeIdxB)
 	{
 		Edge edge = edges[nodeIdxA][nodeIdxB];
@@ -68,6 +103,7 @@ public class Nodes implements Iterable<Node>
 
 			@Override
 			public Node next() {
+				
 				return nodes[idx++];
 			}
 		};

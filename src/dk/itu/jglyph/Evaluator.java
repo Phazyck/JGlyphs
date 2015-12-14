@@ -4,18 +4,32 @@ import com.anji.integration.Activator;
 
 import dk.itu.jglyph.features.FeatureExtractors;
 
+/**
+ * A class for evaluating glyphs.
+ */
 public class Evaluator 
 {
-	// Neural Network activation object
+	/**
+	 * The neural network that implements the actual evaluation.
+	 */
 	private final Activator network;
 	
+	/**
+	 * Constructs a new evaluator with a given neural network.
+	 * 
+	 * @param network The neural network.
+	 */
 	public Evaluator(Activator network)
 	{
 		this.network = network;
 	}
 	
-	private double threshhold = 1f;
-	
+	/**
+	 * Evaluates a given glyph.
+	 * 
+	 * @param glyph The glyph.
+	 * @return A fitness score of the given glyph.
+	 */
 	public double evaluate(Glyph glyph) {
 		if (network == null) return 1.0; // TODO dunno if this is a good idea
 		
@@ -25,24 +39,4 @@ public class Evaluator
 		
 		return response[0];
 	}
-	
-	/* pass is always false so this doesnt work as is
-	public boolean doesPass(Glyph glyph) {
-		
-		double fitness = evaluate(glyph);
-		
-		// WTF IS THIS???
-		boolean pass = fitness + Double.MIN_VALUE >= threshhold;
-		
-		if(pass)
-		{
-			threshhold = 1;
-		}
-		else
-		{
-			threshhold *= 0.9;
-		}
-		
-		return(pass);
-	}*/
 }

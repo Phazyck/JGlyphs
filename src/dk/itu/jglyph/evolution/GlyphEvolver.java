@@ -106,7 +106,7 @@ public class GlyphEvolver
 			
 			glyph.randomizeEdges();
 			
-			population.add(makeSubject(glyph.clone()));
+			population.add(makeSubject(glyph.copy()));
 			++i;
 		}
 		
@@ -123,7 +123,7 @@ public class GlyphEvolver
 		{
 			while(glyph.getEdges().size() < i)
 			{	
-				Glyph clone = glyph.clone();
+				Glyph clone = glyph.copy();
 				clone.mutate();
 				if(clone.getEdges().size() > glyph.getEdges().size())
 				{
@@ -133,7 +133,7 @@ public class GlyphEvolver
 			
 			while(glyph.getEdges().size() > i)
 			{	
-				Glyph clone = glyph.clone();
+				Glyph clone = glyph.copy();
 				clone.mutate();
 				if(clone.getEdges().size() < glyph.getEdges().size())
 				{
@@ -164,7 +164,7 @@ public class GlyphEvolver
 		{
 			while(glyph.getEdges().size() < i)
 			{	
-				Glyph clone = glyph.clone();
+				Glyph clone = glyph.copy();
 				clone.mutate();
 				if(clone.getEdges().size() > glyph.getEdges().size())
 				{
@@ -174,7 +174,7 @@ public class GlyphEvolver
 			
 			while(glyph.getEdges().size() > i)
 			{	
-				Glyph clone = glyph.clone();
+				Glyph clone = glyph.copy();
 				clone.mutate();
 				if(clone.getEdges().size() < glyph.getEdges().size())
 				{
@@ -182,7 +182,7 @@ public class GlyphEvolver
 				}				
 			}
 			
-			result.add(glyph.clone());
+			result.add(glyph.copy());
 		}
 		
 		return(result);
@@ -281,7 +281,7 @@ public class GlyphEvolver
 //					Random.pickChanceDescending(subjects, 0, survivors, parentPickChance, parentPickChanceIncrement);
 					Random.pickRandom(subjects, 0, survivors);
 			
-			Glyph data1 = gene1.glyph.clone();
+			Glyph data1 = gene1.glyph.copy();
 			
 			if((count - idx) == 1)
 			{
@@ -291,7 +291,7 @@ public class GlyphEvolver
 			}
 			
 			Subject gene2 = Random.pickRandom(subjects, 0, survivors, gene1);
-			Glyph data2 = gene2.glyph.clone();
+			Glyph data2 = gene2.glyph.copy();
 			
 			boolean doMutation = Random.getBoolean(mutationChance);
 			boolean doCrossover = !doMutation || Random.getBoolean(crossoverChance);

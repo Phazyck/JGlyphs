@@ -1,7 +1,6 @@
 package dk.itu.jglyph;
 
 import java.io.IOException;
-import java.util.List;
 import javax.swing.SwingWorker;
 
 import com.anji.integration.Activator;
@@ -9,24 +8,46 @@ import com.anji.util.Properties;
 
 import dk.itu.jglyph.features.FeatureExtractors;
 import dk.itu.jglyph.neat.NeatUtil;
-import dk.itu.jglyph.neat.StimulusTargetPair;
 import dk.itu.jglyph.user.Model;
 
+/**
+ * A class for filtering nodes using an evolved fitness function.
+ */
 public class Filter {
 	
+	/**
+	 * The file that contains the properties tied to this class.
+	 */
 	private final static String PROPERTIES_FILE_NAME = "glyph.properties";
+	
+	/**
+	 * The properties object for accessing properties related to this class. 
+	 */
 	private Properties properties;
 	
+	/**
+	 * The glyph evaluator.
+	 */
 	private Evaluator evaluator;
 	
-	// training data gathered so far
+	/**
+	 * The constructed user model, based on recorded choices.
+	 */
 	private Model model;
 	
+	/**
+	 * Gets the current evaluator which is used for filtering.
+	 * 
+	 * @return The evaluator.
+	 */
 	public Evaluator getEvaluator()
 	{
 		return(evaluator);
 	}
 	
+	/**
+	 * Constructs new filter.
+	 */
 	public Filter() {
 		model = new Model();
 		
@@ -46,6 +67,9 @@ public class Filter {
 		}
 	}
 	
+	/**
+	 * Evolves the internal evaluator.
+	 */
 	private void evolveEvalutor()
 	{
 		if (model.isEmpty()) {
@@ -56,8 +80,17 @@ public class Filter {
 		evaluator = new Evaluator(network);
 	}
 	
+	/**
+	 * Indicates whether or not the filter is currently doing evolution.
+	 */
 	private boolean evolving = false;
 	
+	/**
+	 * Updates the filter, by providing additional information about glyphs.
+	 * 
+	 * @param better The glyph that is better than the worse glyph.
+	 * @param worse The glyph that is worse than the better glyph.
+	 */
 	public void update(Glyph better, Glyph worse) {
 		model.addRelation(better, worse);
 		
@@ -82,6 +115,10 @@ public class Filter {
 		}
 	}
 
+	/**
+	 * Gets the recorded user model.
+	 * @return The user model
+	 */
 	public Model getModel() {
 		return model;
 	}

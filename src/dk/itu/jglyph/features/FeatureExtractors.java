@@ -131,7 +131,7 @@ public class FeatureExtractors
 		  List<Double> result = new ArrayList<Double>();
 		  for (Node node : g.getNodes()) {
 			  // TODO x/y cannot be double with our current creation scheme
-			  int id = g.getNodeId((int)node.x, (int)node.y);
+			  int id = g.getNodeIdx((int)node.x, (int)node.y);
 			  List<Edge> edges = g.getEdges(id);
 			  for (int i = 0; i < edges.size(); i++) {
 				  for (int j = i+1; j < edges.size(); j++) {
