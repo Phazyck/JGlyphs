@@ -7,6 +7,9 @@ import dk.itu.jglyph.Evaluator;
 import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.util.Random;
 
+/**
+ * A class for evolving glyphs using a given fitness function.
+ */
 public class GlyphEvolver 
 {
 	private final static int DEFAULT_POPULATION_SIZE = 256;
@@ -15,9 +18,6 @@ public class GlyphEvolver
 	private final static double DEFAULT_BEST_SURVIVOR_RATE = 0.3;
 	private final static double DEFAULT_TOTAL_SURVIVOR_RATE = 0.5;
 	
-//	private final static double DEFAULT_PARENT_PICK_CHANCE = 0.5;
-//	private final static double DEFAULT_PARENT_PICK_CHANCE_INCREMENT = -0.01;
-//	
 	private final static double DEFAULT_MUTATION_CHANCE = 0.2;
 	private final static double DEFAULT_CROSSOVER_CHANCE = 0.95;
 	
@@ -30,9 +30,6 @@ public class GlyphEvolver
 	private double bestSurvivorRate;
 	private double totalSuvirvorRate;
 	
-//	private double parentPickChance;
-//	private double parentPickChanceIncrement;
-	
 	private double mutationChance;
 	private double crossoverChance;
 	
@@ -43,6 +40,11 @@ public class GlyphEvolver
 	
 	private TreeSet<Subject> population;
 	
+	/**
+	 * Constructs a new glyph evolver with a given evaluator.
+	 * 
+	 * @param evaluator The evaluator.
+	 */
 	public GlyphEvolver(Evaluator evaluator)
 	{
 		GlyphEvolverProperties properties = new GlyphEvolverProperties("glyph.properties");
@@ -51,8 +53,6 @@ public class GlyphEvolver
 		numberOfGenerations = properties.tryGetInt("num.generations", DEFAULT_NUMBER_OF_GENERATIONS);
 		bestSurvivorRate = properties.tryGetDouble("survivor.rate.best", DEFAULT_BEST_SURVIVOR_RATE);
 		totalSuvirvorRate = properties.tryGetDouble("survivor.rate.total", DEFAULT_TOTAL_SURVIVOR_RATE);
-//		parentPickChance = properties.tryGetDouble("parent.pick.chance", DEFAULT_PARENT_PICK_CHANCE);
-//		parentPickChanceIncrement = properties.tryGetDouble("parent.pick.chance.increment", DEFAULT_PARENT_PICK_CHANCE_INCREMENT);
 		mutationChance = properties.tryGetDouble("mutation.chance", DEFAULT_MUTATION_CHANCE);
 		crossoverChance = properties.tryGetDouble("crossover.chance", DEFAULT_CROSSOVER_CHANCE);
 		glyphWidth = properties.tryGetInt("glyph.width", DEFAULT_GLYPH_WIDTH);
@@ -61,15 +61,21 @@ public class GlyphEvolver
 		init(evaluator);
 	}
 	
+	/**
+	 * Gets the current population.
+	 * 
+	 * @return The population.
+	 */
 	public Iterable<Subject> getPopulation()
 	{
-//		TreeSet<Subject> clone = new TreeSet<Subject>(population); // NOTE this is not a deep copy, if that's what you've assumed
-//		
-//		return(clone);
-		
 		return population;
 	}
 	
+	/**
+	 * (Re)initializes the evolver with a given evaluator.
+	 * 
+	 * @param evaluator The evaluator.
+	 */
 	public void init(Evaluator evaluator)
 	{
 		this.evaluator = evaluator;
@@ -78,82 +84,23 @@ public class GlyphEvolver
 		
 		Glyph glyph = new Glyph(glyphWidth, glyphHeight);
 		
-		int i = 0;
-		
 		while(population.size() < populationSize)
 		{
-//			int tries = 100;
-//			
-//			while(glyph.getEdges().size() < i && (--tries > 0))
-//			{	
-//				Glyph clone = glyph.clone();
-//				clone.mutate();
-//				if(clone.getEdges().size() > glyph.getEdges().size())
-//				{
-//					glyph = clone;
-//				}				
-//			}
-//			
-//			while(glyph.getEdges().size() > i && (--tries > 0))
-//			{	
-//				Glyph clone = glyph.clone();
-//				clone.mutate();
-//				if(clone.getEdges().size() < glyph.getEdges().size())
-//				{
-//					glyph = clone;
-//				}				
-//			}
-			
 			glyph.randomizeEdges();
 			
 			population.add(makeSubject(glyph.copy()));
-			++i;
 		}
-		
-		 
-		
-		testEvaluator();
 	}
 	
-	private void testEvaluator()
-	{
-		Glyph glyph = new Glyph(glyphWidth, glyphHeight);
-		double lastFitness = 0;
-		for(int i = 0; i < 50; ++i)
-		{
-			while(glyph.getEdges().size() < i)
-			{	
-				Glyph clone = glyph.copy();
-				clone.mutate();
-				if(clone.getEdges().size() > glyph.getEdges().size())
-				{
-					glyph = clone;
-				}				
-			}
-			
-			while(glyph.getEdges().size() > i)
-			{	
-				Glyph clone = glyph.copy();
-				clone.mutate();
-				if(clone.getEdges().size() < glyph.getEdges().size())
-				{
-					glyph = clone;
-				}				
-			}
-			
-			
-			
-			double fitness = evaluator.evaluate(glyph);
-			
-			boolean increase = lastFitness < fitness;
-			lastFitness = fitness;
-			System.out.print(increase ? "+" : "-");
-			System.out.printf("%2d = %f\n", i, fitness);
-		}
-		
-		System.out.println();
-	}
-	
+	/**
+	 * Generates a population of glyphs with a wide variety of features.
+	 * 
+	 * NOTE(oliver): This doesn't really belong here.
+	 * NOTE(oliver): This only makes variety in regards to edge counts.
+	 * 
+	 * @param size The amount of desired glyphs.
+	 * @return The generated glyphs.
+	 */
 	public ArrayList<Glyph> getDistributedPopulation(int size)
 	{
 		ArrayList<Glyph> result = new ArrayList<>();
@@ -188,10 +135,19 @@ public class GlyphEvolver
 		return(result);
 	}
 	
+	/**
+	 * Assigns a new evaluator to the evolver.
+	 * @param evaluator
+	 */
 	public void setEvaluator(Evaluator evaluator) {
 		this.evaluator = evaluator;
 	}
 	
+	/**
+	 * Constructs a random glyph.
+	 * 
+	 * @return The random glyph.
+	 */
 	public Glyph randomGlyph()
 	{
 		Glyph glyph = new Glyph(glyphWidth, glyphHeight);
@@ -199,6 +155,12 @@ public class GlyphEvolver
 		return glyph;
 	}
 	
+	/**
+	 * Calculates the fitness of a glyph.
+	 * 
+	 * @param glyph The glyph.
+	 * @return The fitness.
+	 */
 	private double getFitness(Glyph glyph)
 	{
 		double fitness = evaluator.evaluate(glyph);
@@ -206,6 +168,12 @@ public class GlyphEvolver
 		return(fitness);
 	}
 	
+	/**
+	 * Makes a population subject from a glyph.
+	 * 
+	 * @param glyph The glyph.
+	 * @return The subject.
+	 */
 	private Subject makeSubject(Glyph glyph)
 	{
 		double fitness = getFitness(glyph);
@@ -213,6 +181,11 @@ public class GlyphEvolver
 		return(subject);
 	}
 	
+	/**
+	 * Gets the best subject of the entire current population.
+	 * 
+	 * @return The champion.
+	 */
 	public Subject getChampion()
 	{
 		Subject champion = population.first();
@@ -220,15 +193,13 @@ public class GlyphEvolver
 		return(champion);
 	}
 
+	/**
+	 * Evolves the population of glyphs.
+	 */
 	public void evolve()
 	{
 		for(int generation = 0; generation < numberOfGenerations; ++generation)
 		{
-//			if(getChampion().fitness >= fitnessTarget)
-//			{
-//				break;
-//			}
-			
 			int length = population.size();
 			
 			Subject[] subjects = new Subject[length];
@@ -263,12 +234,17 @@ public class GlyphEvolver
 		double bestFitness = champion.fitness;
 		double worstFitness = population.last().fitness;
 
-//		System.out.printf("Generation #%d\n", generation);
 		System.out.printf("Best fitness %f\n", bestFitness);
 		System.out.printf("Worst fitness %f\n", worstFitness);
 		System.out.println();
 	}
 	
+	/**
+	 * Breeds new children in a population of subjects with some amount of survivors.
+	 * 
+	 * @param subjects The subjects.
+	 * @param survivors The survivors.
+	 */
 	private void breedChildren(Subject[] subjects, int survivors)
 	{
 		int count = subjects.length - survivors;
@@ -278,7 +254,6 @@ public class GlyphEvolver
 			idx += 2)
 		{
 			Subject gene1 = 
-//					Random.pickChanceDescending(subjects, 0, survivors, parentPickChance, parentPickChanceIncrement);
 					Random.pickRandom(subjects, 0, survivors);
 			
 			Glyph data1 = gene1.glyph.copy();

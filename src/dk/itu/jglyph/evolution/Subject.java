@@ -4,11 +4,27 @@ import java.util.Comparator;
 
 import dk.itu.jglyph.Glyph;
 
+/**
+ * A subject in the population of the glyph evolver.
+ */
 public class Subject implements Comparable<Subject> 
 {
+	/**
+	 * The glyph.
+	 */
 	public final Glyph glyph;
+	
+	/**
+	 * The fitness.
+	 */
 	public final double fitness;
 	
+	/**
+	 * Constructs a subject with a given glyph and fitness.
+	 * 
+	 * @param glyph The glyph.
+	 * @param fitness The fitness.
+	 */
 	public Subject(Glyph glyph, double fitness)
 	{
 		this.glyph = glyph;
@@ -27,6 +43,9 @@ public class Subject implements Comparable<Subject>
 		return(comparison);
 	}
 	
+	/**
+	 * A descending comparator for subjects.
+	 */
 	public final static Comparator<Subject> COMPARATOR_DESCENDING = new Comparator<Subject>() {
 
 		@Override
