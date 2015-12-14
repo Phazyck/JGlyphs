@@ -12,32 +12,86 @@ import dk.itu.jglyph.util.Random;
  */
 public class GlyphEvolver 
 {
+	/**
+	 * The default population size.
+	 */
 	private final static int DEFAULT_POPULATION_SIZE = 256;
+	/**
+	 * The default maximum number of generations an evolution run should go through.
+	 */
 	private final static int DEFAULT_NUMBER_OF_GENERATIONS = 1024;
-	
+
+	/**
+	 * The default percentage of best individuals that should be picked out for survival. 
+	 */
 	private final static double DEFAULT_BEST_SURVIVOR_RATE = 0.3;
+	/**
+	 * The default percentage of total individuals that should be picked out for survival. 
+	 */
 	private final static double DEFAULT_TOTAL_SURVIVOR_RATE = 0.5;
 	
+	/**
+	 * The default chance that a mutation will be performed. 
+	 */
 	private final static double DEFAULT_MUTATION_CHANCE = 0.2;
+	/**
+	 * The default chance that a crossover will be performed. 
+	 */
 	private final static double DEFAULT_CROSSOVER_CHANCE = 0.95;
 	
+	/**
+	 * The default width (amount of nodes) of a glyph.
+	 */
 	private final static int DEFAULT_GLYPH_WIDTH = 3;
+	/**
+	 * The default height (amount of nodes) of a glyph.
+	 */
 	private final static int DEFAULT_GLYPH_HEIGHT = 3;
 	
+	/**
+	 * The current population size.
+	 */
 	private int populationSize;
+	/**
+	 * The current maximum number of generations an evolution run should go through.
+	 */
 	private int numberOfGenerations;
 	
+	/**
+	 * The current percentage of best individuals that should be picked out for survival. 
+	 */
 	private double bestSurvivorRate;
+	/**
+	 * The current percentage of total individuals that should be picked out for survival. 
+	 */
 	private double totalSuvirvorRate;
 	
+	/**
+	 * The current chance that a mutation will be performed. 
+	 */
 	private double mutationChance;
+	/**
+	 * The current chance that a crossover will be performed. 
+	 */
 	private double crossoverChance;
 	
+	/**
+	 * The current width (amount of nodes) of a glyph.
+	 */
 	private int glyphWidth;
+	/**
+	 * The current height (amount of nodes) of a glyph.
+	 */
 	private int glyphHeight;
 	
+	/**
+	 * The current evaluator.
+	 */
 	private Evaluator evaluator;
 	
+	/**
+	 * The current population.
+	 */
 	private TreeSet<Subject> population;
 	
 	/**
