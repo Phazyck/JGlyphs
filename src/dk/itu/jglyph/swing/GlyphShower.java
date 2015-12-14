@@ -3,25 +3,16 @@ package dk.itu.jglyph.swing;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import dk.itu.jglyph.Evaluator;
-import dk.itu.jglyph.Filter;
 import dk.itu.jglyph.Glyph;
-import dk.itu.jglyph.evolution.GlyphEvolver;
-import dk.itu.jglyph.evolution.Subject;
-import dk.itu.jglyph.util.Random;
 
 public class GlyphShower extends JFrame 
 {
@@ -45,9 +36,6 @@ public class GlyphShower extends JFrame
 		
 		JPanel panelCenter = new JPanel();
 		add(panelCenter, BorderLayout.CENTER);
-		
-//		JPanel panelSouth = new JPanel();
-//		add(panelSouth, BorderLayout.SOUTH);
 		
 		addGlyphPanels(panelCenter);
 		

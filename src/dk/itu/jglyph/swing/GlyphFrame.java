@@ -85,8 +85,9 @@ public class GlyphFrame extends JFrame
 				double leftValue = FeatureExtractors.edgeCount(glyphPanelLeft.getGlyph());
 				double rightValue = FeatureExtractors.edgeCount(glyphPanelRight.getGlyph());
 				
-				leftValue = Math.abs(leftValue - 3);
-				rightValue = Math.abs(rightValue - 3);
+				int ec = 4;
+				leftValue = Math.abs(leftValue - ec);
+				rightValue = Math.abs(rightValue - ec);
 				
 				
 				if (leftValue <= rightValue) {
@@ -121,11 +122,14 @@ public class GlyphFrame extends JFrame
 			}
 		});
 		
-		population = new ArrayList<Glyph>();
-		
-		for (int i = 0; i < MAX_TEST_COUNT; i++) {
-			population.add(evolver.randomGlyph());
-		}
+//		population = new ArrayList<Glyph>();
+//		
+//		for (int i = 0; i < MAX_TEST_COUNT; i++) {
+//			population.add(evolver.randomGlyph());
+//		}
+		population = evolver.getDistributedPopulation(MAX_TEST_COUNT);
+		glyphShower.setGlyphs(population, filter.getEvaluator());
+//		updatePopulation();
 		
 		updateGlyphs();
 		
@@ -227,7 +231,7 @@ public class GlyphFrame extends JFrame
 	{
 		Glyph glyph = null;
 		if (population.size() == 0) updatePopulation();
-//		do 
+		do 
 		{
 			if (population.size() == 0){
 				System.out.println("Ran out of evolved glyphs; new glyph is random...");
@@ -235,7 +239,7 @@ public class GlyphFrame extends JFrame
 			}
 			else glyph = population.remove(population.size()-1);
 		} 
-//		while (visited.contains(glyph));
+		while (visited.contains(glyph));
 		
 		visited.add(glyph.clone());
 		

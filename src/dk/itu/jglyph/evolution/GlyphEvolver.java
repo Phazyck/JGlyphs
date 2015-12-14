@@ -1,8 +1,6 @@
 package dk.itu.jglyph.evolution;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.ArrayList;
 import java.util.TreeSet;
 
 import dk.itu.jglyph.Evaluator;
@@ -14,14 +12,12 @@ public class GlyphEvolver
 	private final static int DEFAULT_POPULATION_SIZE = 256;
 	private final static int DEFAULT_NUMBER_OF_GENERATIONS = 1024;
 	
-	private final static double DEFAULT_FITNESS_TARGET = 0.8;
-	
 	private final static double DEFAULT_BEST_SURVIVOR_RATE = 0.3;
 	private final static double DEFAULT_TOTAL_SURVIVOR_RATE = 0.5;
 	
-	private final static double DEFAULT_PARENT_PICK_CHANCE = 0.5;
-	private final static double DEFAULT_PARENT_PICK_CHANCE_INCREMENT = -0.01;
-	
+//	private final static double DEFAULT_PARENT_PICK_CHANCE = 0.5;
+//	private final static double DEFAULT_PARENT_PICK_CHANCE_INCREMENT = -0.01;
+//	
 	private final static double DEFAULT_MUTATION_CHANCE = 0.2;
 	private final static double DEFAULT_CROSSOVER_CHANCE = 0.95;
 	
@@ -31,13 +27,11 @@ public class GlyphEvolver
 	private int populationSize;
 	private int numberOfGenerations;
 	
-	private double fitnessTarget;
-	
 	private double bestSurvivorRate;
 	private double totalSuvirvorRate;
 	
-	private double parentPickChance;
-	private double parentPickChanceIncrement;
+//	private double parentPickChance;
+//	private double parentPickChanceIncrement;
 	
 	private double mutationChance;
 	private double crossoverChance;
@@ -55,11 +49,10 @@ public class GlyphEvolver
 		
 		populationSize = properties.tryGetInt("popul.size", DEFAULT_POPULATION_SIZE);
 		numberOfGenerations = properties.tryGetInt("num.generations", DEFAULT_NUMBER_OF_GENERATIONS);
-		fitnessTarget = properties.tryGetDouble("fitness.target", DEFAULT_FITNESS_TARGET);
 		bestSurvivorRate = properties.tryGetDouble("survivor.rate.best", DEFAULT_BEST_SURVIVOR_RATE);
 		totalSuvirvorRate = properties.tryGetDouble("survivor.rate.total", DEFAULT_TOTAL_SURVIVOR_RATE);
-		parentPickChance = properties.tryGetDouble("parent.pick.chance", DEFAULT_PARENT_PICK_CHANCE);
-		parentPickChanceIncrement = properties.tryGetDouble("parent.pick.chance.increment", DEFAULT_PARENT_PICK_CHANCE_INCREMENT);
+//		parentPickChance = properties.tryGetDouble("parent.pick.chance", DEFAULT_PARENT_PICK_CHANCE);
+//		parentPickChanceIncrement = properties.tryGetDouble("parent.pick.chance.increment", DEFAULT_PARENT_PICK_CHANCE_INCREMENT);
 		mutationChance = properties.tryGetDouble("mutation.chance", DEFAULT_MUTATION_CHANCE);
 		crossoverChance = properties.tryGetDouble("crossover.chance", DEFAULT_CROSSOVER_CHANCE);
 		glyphWidth = properties.tryGetInt("glyph.width", DEFAULT_GLYPH_WIDTH);
@@ -83,11 +76,116 @@ public class GlyphEvolver
 		
 		population = new TreeSet<Subject>(Subject.COMPARATOR_DESCENDING);
 		
+		Glyph glyph = new Glyph(glyphWidth, glyphHeight);
+		
+		int i = 0;
+		
 		while(population.size() < populationSize)
 		{
-			Subject subject = makeSubject(randomGlyph());
-			population.add(subject);
+//			int tries = 100;
+//			
+//			while(glyph.getEdges().size() < i && (--tries > 0))
+//			{	
+//				Glyph clone = glyph.clone();
+//				clone.mutate();
+//				if(clone.getEdges().size() > glyph.getEdges().size())
+//				{
+//					glyph = clone;
+//				}				
+//			}
+//			
+//			while(glyph.getEdges().size() > i && (--tries > 0))
+//			{	
+//				Glyph clone = glyph.clone();
+//				clone.mutate();
+//				if(clone.getEdges().size() < glyph.getEdges().size())
+//				{
+//					glyph = clone;
+//				}				
+//			}
+			
+			glyph.randomizeEdges();
+			
+			population.add(makeSubject(glyph.clone()));
+			++i;
 		}
+		
+		 
+		
+		testEvaluator();
+	}
+	
+	private void testEvaluator()
+	{
+		Glyph glyph = new Glyph(glyphWidth, glyphHeight);
+		double lastFitness = 0;
+		for(int i = 0; i < 50; ++i)
+		{
+			while(glyph.getEdges().size() < i)
+			{	
+				Glyph clone = glyph.clone();
+				clone.mutate();
+				if(clone.getEdges().size() > glyph.getEdges().size())
+				{
+					glyph = clone;
+				}				
+			}
+			
+			while(glyph.getEdges().size() > i)
+			{	
+				Glyph clone = glyph.clone();
+				clone.mutate();
+				if(clone.getEdges().size() < glyph.getEdges().size())
+				{
+					glyph = clone;
+				}				
+			}
+			
+			
+			
+			double fitness = evaluator.evaluate(glyph);
+			
+			boolean increase = lastFitness < fitness;
+			lastFitness = fitness;
+			System.out.print(increase ? "+" : "-");
+			System.out.printf("%2d = %f\n", i, fitness);
+		}
+		
+		System.out.println();
+	}
+	
+	public ArrayList<Glyph> getDistributedPopulation(int size)
+	{
+		ArrayList<Glyph> result = new ArrayList<>();
+		
+		Glyph glyph = new Glyph(glyphWidth, glyphHeight);
+		
+		for(int i = 0; i < size; ++i)
+		{
+			while(glyph.getEdges().size() < i)
+			{	
+				Glyph clone = glyph.clone();
+				clone.mutate();
+				if(clone.getEdges().size() > glyph.getEdges().size())
+				{
+					glyph = clone;
+				}				
+			}
+			
+			while(glyph.getEdges().size() > i)
+			{	
+				Glyph clone = glyph.clone();
+				clone.mutate();
+				if(clone.getEdges().size() < glyph.getEdges().size())
+				{
+					glyph = clone;
+				}				
+			}
+			
+			result.add(glyph.clone());
+		}
+		
+		return(result);
 	}
 	
 	public void setEvaluator(Evaluator evaluator) {
@@ -179,7 +277,9 @@ public class GlyphEvolver
 			idx < count;
 			idx += 2)
 		{
-			Subject gene1 = Random.pickChanceDescending(subjects, survivors, count, parentPickChance, parentPickChanceIncrement);
+			Subject gene1 = 
+//					Random.pickChanceDescending(subjects, 0, survivors, parentPickChance, parentPickChanceIncrement);
+					Random.pickRandom(subjects, 0, survivors);
 			
 			Glyph data1 = gene1.glyph.clone();
 			
@@ -190,7 +290,7 @@ public class GlyphEvolver
 				break;
 			}
 			
-			Subject gene2 = Random.pickRandom(subjects, survivors, count, gene1);
+			Subject gene2 = Random.pickRandom(subjects, 0, survivors, gene1);
 			Glyph data2 = gene2.glyph.clone();
 			
 			boolean doMutation = Random.getBoolean(mutationChance);

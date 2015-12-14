@@ -134,7 +134,21 @@ public class Glyph
 		int length = nodes.length;
 		int nodeIdxA = RNG.nextInt(length);
 		int nodeIdxB = RNG.nextInt(length);
-		boolean value = adjMatrix.getValue(nodeIdxA, nodeIdxB);
+		
+		boolean remove = RNG.nextBoolean();
+		boolean value = !remove;
+		
+		for(int i = 0; i < 100; ++i)
+		{
+			 nodeIdxA = RNG.nextInt(length);
+			 nodeIdxB = RNG.nextInt(length);
+			 value = adjMatrix.getValue(nodeIdxA, nodeIdxB);
+			 if(value == remove)
+			 {
+				 break;
+			 }
+		}	
+		
 		adjMatrix.setValue(nodeIdxA, nodeIdxB, !value);
 	}
 	

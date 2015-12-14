@@ -53,6 +53,18 @@ public class Random
 		return(index);
 	}
 	
+	public static <T> T pickRandom(T[] items, int offset, int length)
+	{
+		while(true)
+		{
+			int index = pickIndex(items, offset, length);
+			T item = items[index];
+
+			return(item);
+			
+		}
+	}
+	
 	public static <T> T pickRandom(T[] items, int offset, int length, T ignore)
 	{
 		while(true)
