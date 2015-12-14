@@ -15,6 +15,9 @@ import dk.itu.jglyph.Edge;
 import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.Node;
 
+/**
+ * A panel for displaying a single glyph.
+ */
 public class GlyphPanel  extends JComponent
 {
 	/**
@@ -22,39 +25,29 @@ public class GlyphPanel  extends JComponent
 	 */
 	private static final long serialVersionUID = 6967190278448536610L;
 	
+	/**
+	 * The amount of empty space (pixels) around a glyph.
+	 */
 	private final static int DEFAULT_PADDING = 8;
+	
+	/**
+	 * The default title of the glyph. (none).
+	 */
 	private final static String DEFAULT_TITLE = null;
 	
+	/**
+	 * The glyph to be displayed.
+	 */
 	private Glyph glyph;
 	
+	/**
+	 * Constructs a new panel for displaying glyphs.
+	 */
 	public GlyphPanel()
 	{
-		this(DEFAULT_PADDING, DEFAULT_TITLE);
-	}
-	
-	public GlyphPanel(int padding)
-	{
-		this(padding, DEFAULT_TITLE);
-	}
-	
-	public GlyphPanel(String title)
-	{
-		this(DEFAULT_PADDING, title);
-	}
-	
-	public void setGlyph(Glyph glyph)
-	{
-		this.glyph = glyph;
-		repaint();
-	}
-	
-	public Glyph getGlyph()
-	{
-		return(glyph);
-	}
-	
-	public GlyphPanel(int padding, String title)
-	{
+		int padding = DEFAULT_PADDING;
+		String title = DEFAULT_TITLE;
+		
 		Border outerBorder = BorderFactory.createEmptyBorder(padding, padding, padding, padding);
 		Border middleBorder = BorderFactory.createTitledBorder(title);
 		Border compoundBorder = BorderFactory.createCompoundBorder(outerBorder, middleBorder);
@@ -64,6 +57,33 @@ public class GlyphPanel  extends JComponent
 		setBorder(border);
 	}
 	
+	/**
+	 * Assigns a new glyph to the panel. 
+	 * 
+	 * @param glyph The glyph.
+	 */
+	public void setGlyph(Glyph glyph)
+	{
+		this.glyph = glyph;
+		repaint();
+	}
+
+	/**
+	 * Gets the glyph that is currently held by this panel.
+	 * 
+	 * @return The glyph.
+	 */
+	public Glyph getGlyph()
+	{
+		return(glyph);
+	
+	}
+		
+	/**
+	 * Draws the current glyph to the panel.
+	 * 
+	 * @param g2 The 2D graphics object.
+	 */
 	private void draw(Graphics2D g2)
 	{
 		double minX = Double.MAX_VALUE;
@@ -132,21 +152,9 @@ public class GlyphPanel  extends JComponent
 			
 			g2.drawLine(x1, y1, x2, y2);
 		}
-		
-//		for(Node node : glyph.getNodes())
-//		{
-//			int x = (int)(x0 + node.x * s);
-//			int y = (int)(y0 + node.y * s);
-//			
-//			int r = 2;
-//			int d = r * 2;
-//			g2.drawOval(x - r, y - r, d, d);
-//		}
-		
-//		g2.drawRect(xMin, yMin, xMax, yMax);
-      
 	}
 	
+	// The range in which drawing may be performed.
 	private int xMin, xMax, yMin, yMax;
 	
 	@Override
@@ -172,60 +180,4 @@ public class GlyphPanel  extends JComponent
         draw(g2);
         g2.setStroke(stroke);
 	}
-	
-//	private void printFeatures()
-//	{
-//		FeatureExtractors extractors = FeatureExtractors.getInstance();
-//		int count = extractors.count();
-//		
-//		System.out.println("--- FEATURES ---");
-//		
-//		for(int idx = 0; idx < count; ++idx)
-//		{
-//			IFeatureExtractor extractor = extractors.getExtractor(idx);
-//			String description = extractors.getDescription(idx);
-//			double feature = extractor.extract(getGlyph());
-//			System.out.printf("%s\n\t%f\n", description, feature);
-//		}
-//		
-//		System.out.println("----------------");
-//	}
-	
-//	public void randomizeGlyph()
-//	{
-//		glyph.randomizeEdges();
-//		printFeatures();
-//		repaint();
-//	}
-//	
-//	public void mutateGlyph()
-//	{
-//		glyph.mutate();
-//		printFeatures();
-//		repaint();
-//	}
-	
-	
-
-//	public void passGlyph() {
-////		System.out.println("PASS");
-//		filter.update(glyph, true);
-//		findNewGlyph();
-//	}
-//
-//	public void failGlyph() {
-////		System.out.println("FAIL");
-//		filter.update(glyph, false);
-//		findNewGlyph();
-//	}
-
-//	public void crossGlyph(GlyphPanel that) {
-//		Glyph thisGlyph = this.glyph;
-//		Glyph thatGlyph = that.glyph;
-//		
-//		thisGlyph.crossWith(thatGlyph);
-//		
-//		this.repaint();
-//		that.repaint();
-//	}
 }
