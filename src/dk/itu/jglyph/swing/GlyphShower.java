@@ -14,6 +14,9 @@ import javax.swing.JPanel;
 import dk.itu.jglyph.Evaluator;
 import dk.itu.jglyph.Glyph;
 
+/**
+ * A window for prodiving an overview of a collection of glyphs.
+ */
 public class GlyphShower extends JFrame 
 {
 	/**
@@ -21,15 +24,39 @@ public class GlyphShower extends JFrame
 	 */
 	private static final long serialVersionUID = -3005890889450279723L;
 	
+	/**
+	 * The window title.
+	 */
 	private final static String FRAME_TITLE = "JGlyph overview";
+	
+	/**
+	 * The minimum width of the window.
+	 */
 	private final static int MIN_WIDTH = 800;
+	
+	/**
+	 * The minimum height of the window.
+	 */
 	private final static int MIN_HEIGHT = 256;
+	
+	/**
+	 * The amount of glyphs that can be displayed at once in this window.
+	 */
 	public final static int MAX_COUNT = 20;
 	
+	/**
+	 * The glyph panels that are displayed in this window. 
+	 */
 	private GlyphPanel[] glyphPanels;
 	
+	/**
+	 * A glyph evaluator for calculating the fitness of glyphs.
+	 */
 	private Evaluator evaluator;
 	
+	/**
+	 * Constructs a new glyph shower.
+	 */
 	public GlyphShower()
 	{
 		setLayout(new BorderLayout());
@@ -50,6 +77,11 @@ public class GlyphShower extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	/**
+	 * Adds glyph panels to a container.
+	 * 
+	 * @param container The container.
+	 */
 	private void addGlyphPanels(Container container)
 	{
 		GridLayout gridLayout = new GridLayout(2, 0);
@@ -87,6 +119,11 @@ public class GlyphShower extends JFrame
 	
 	private int iteration = 0;
 	
+	/**
+	 * Assigns new glyphs and an evaluator to the glyph shower. 
+	 * @param glyphs The glyphs.
+	 * @param evaluator The evaluator.
+	 */
 	public void setGlyphs(List<Glyph> glyphs, Evaluator evaluator)
 	{
 		setTitle("JGlyph overview population #" + (++iteration));
