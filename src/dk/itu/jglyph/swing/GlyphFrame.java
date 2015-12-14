@@ -63,25 +63,10 @@ public class GlyphFrame extends JFrame
 		JPanel panelCenter = new JPanel();
 		add(panelCenter, BorderLayout.CENTER);
 		
-//		JPanel panelSouth = new JPanel();
-//		add(panelSouth, BorderLayout.SOUTH);
-		
 		addGlyphs(panelCenter);
-//		addButtons(panelSouth);
-		
-		
 
     	glyphShower = new GlyphShower();
     	glyphShower.setVisible(true);
-		
-		/*EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-            	glyphShower = new GlyphShower();
-//        		SwingUtilities.updateComponentTreeUI(frame);
-            	glyphShower.setVisible(true);
-            }
-        });*/
 		
 		setTitle(FRAME_TITLE);
 		
@@ -93,7 +78,7 @@ public class GlyphFrame extends JFrame
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		// Autopick timer
+		// Auto-pick timer
 		Timer timer = new Timer(250, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -125,7 +110,7 @@ public class GlyphFrame extends JFrame
 					case KeyEvent.VK_RIGHT: {
 						pickRight();
 					} break;
-					// Events for starting and stopping the autpick function
+					// Events for starting and stopping the auto-pick function
 					case KeyEvent.VK_P: {
 						if (timer.isRunning()) timer.stop();
 						else timer.start();
@@ -236,22 +221,6 @@ public class GlyphFrame extends JFrame
 		// TODO somehow pick something that maximises the amount of knowledge gained
 		Glyph[] glyphs = visited.toArray(new Glyph[visited.size()]);
 		return glyphs[Random.getInt(glyphs.length)];
-		
-//		Glyph current = null;
-//		int currentCount = Integer.MIN_VALUE;
-//		
-//		// Stupid heuristic: Pick most best node always
-//		for (Node node : filter.getModel().getNodes()) {
-//			// We want the top most. if it has parents, it's no good
-//			if (!node.parents.isEmpty()) continue;
-//			
-//			if (node.countUniqueChildren() > currentCount) {
-//				current = node.glyph;
-//				currentCount = node.countUniqueChildren();
-//			}
-//		} 
-//		
-//		return current;
 	}
 	
 	private Glyph findNewGlyph()
@@ -278,7 +247,6 @@ public class GlyphFrame extends JFrame
 		
 		// TODO keep evolution alive
 		evolver.init(evaluator);
-		//evolver.setEvaluator(filter.getEvaluator());
 		evolver.evolve();
 		
 		population = new ArrayList<Glyph>();
@@ -292,43 +260,7 @@ public class GlyphFrame extends JFrame
 		glyphShower.setGlyphs(population, evaluator);
 		while (population.size() > MAX_TEST_COUNT) population.remove(MAX_TEST_COUNT);
 	}
-	
-//	private void findNewGlyph(GlyphPanel panel)
-//	{	
-		
-		
-//		evolver.init(filter);
-		
-		
-		
-		
-		
-//		Glyph backup = glyph.clone();
-//		
-//		while(visited.contains(glyph))
-//		{
-//			int attempts = 0;
-//			
-//			do
-//			{
-//				glyph = backup.clone();
-//				glyph.mutate();
-//				
-//				if(attempts++ > 100)
-//				{
-//					attempts = 0;
-//					backup.randomizeEdges();
-//				}
-//								
-//			} while(!filter.doesPass(glyph));
-//		}
-				
-//		System.out.println();
-		
-//		printFeatures();
-		
-//	}
-	
+
 	private void pickLeft()
 	{
 		Glyph better = glyphPanelLeft.getGlyph();
@@ -359,7 +291,6 @@ public class GlyphFrame extends JFrame
 			@Override public void mouseEntered(MouseEvent e) { }
 			@Override public void mouseClicked(MouseEvent e) { }
 			@Override public void mouseReleased(MouseEvent e) {
-//				System.out.println("Left panel clicked!");
 				pickLeft();
 			}
 		});
@@ -371,7 +302,6 @@ public class GlyphFrame extends JFrame
 			@Override public void mouseEntered(MouseEvent e) { }
 			@Override public void mouseClicked(MouseEvent e) { }
 			@Override public void mouseReleased(MouseEvent e) {
-//				System.out.println("Right panel clicked!");
 				pickRight();
 			}
 		});
@@ -379,105 +309,15 @@ public class GlyphFrame extends JFrame
 		
 		container.add(glyphPanelRight);
 	}
-//	
-//	private void addButtons(Container container)
-//	{
-////		addRandomizerButton(container);
-////		addMutatorButton(container);
-//		addButtonPickLeft(container);
-//		addButtonPickRight(container);
-////		addCrossButton(container);
-//	}
 
-//	private void addRandomizerButton(Container container)
-//	{
-//		JButton buttonRandomize = new JButton("RANDOMIZE");
-//		
-//		buttonRandomize.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				glyphPanel.randomizeGlyph();
-//			}
-//		});
-//		
-//		container.add(buttonRandomize);
-//	}
-	
-//	private void addButtonPass(Container container)
-//	{
-//		JButton buttonPass = new JButton("PASS");
-//		
-//		buttonPass.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				glyphPanel.passGlyph();
-//			}
-//		});
-//		
-//		container.add(buttonPass);
-//	}
-//	
-//	private void addButtonFail(Container container)
-//	{
-//		JButton buttonFail = new JButton("FAIL");
-//		
-//		buttonFail.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				glyphPanel.failGlyph();
-//			}
-//		});
-//		
-//		container.add(buttonFail);
-//	}
-	
-//	private void addMutatorButton(Container container)
-//	{
-//		JButton buttonMutate = new JButton("MUTATE");
-//		
-//		buttonMutate.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				glyphPanel.mutateGlyph();
-//			}
-//		});
-//		
-//		container.add(buttonMutate);
-//	}
-	
-//	private void addCrossButton(Container container)
-//	{
-//		JButton buttonCross = new JButton("CROSS");
-//		
-//		buttonCross.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				glyphPanel.crossGlyph(glyphPanel2);
-//			}
-//		});
-//		
-//		container.add(buttonCross);
-//	}
 
 	public static void main(String[] args)
 	{
-//		try {
-//			String laf = UIManager.getSystemLookAndFeelClassName();
-////			laf = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
-////			System.out.println(laf);
-//			UIManager.setLookAndFeel(laf);
-//
-//		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-//				| UnsupportedLookAndFeelException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
+
 		EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
             	GlyphFrame frame = new GlyphFrame();
-//        		SwingUtilities.updateComponentTreeUI(frame);
         		frame.setVisible(true);
             }
         });
