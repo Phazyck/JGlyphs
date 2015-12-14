@@ -27,6 +27,9 @@ import dk.itu.jglyph.features.FeatureExtractors;
 import dk.itu.jglyph.user.Node;
 import dk.itu.jglyph.util.Random;
 
+/**
+ * A window for picking out glyphs.
+ */
 public class GlyphFrame extends JFrame 
 {
 	/**

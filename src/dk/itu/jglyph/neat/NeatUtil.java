@@ -7,11 +7,23 @@ import com.anji.util.Properties;
 
 import dk.itu.jglyph.user.Model;
 
-public class NeatUtil {
-	
-	// Values for loading neural networks
+/**
+ * A utility class for doing NeuroEvolution of Augmenting Topologies.
+ */
+public class NeatUtil 
+{
+	/**
+	 * Values for loading neural networks.
+	 */
 	private final static String TRANSCRIBER_CLASS_KEY = "glyph.transcriber";
 	
+	/**
+	 * Evolves a neural network using the given user model and properties.
+	 * 
+	 * @param model The user model.
+	 * @param properties The properties.
+	 * @return The evolved neural network.
+	 */
 	public static Activator doEvolution(Model model, Properties properties) {
 		TrainingSet.model = model.copy();
 		System.out.println("Current # of relations:\t" + model.relationCount());
