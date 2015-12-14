@@ -31,8 +31,8 @@ public class GlyphShower extends JFrame
 	private static final long serialVersionUID = -3005890889450279723L;
 	
 	private final static String FRAME_TITLE = "JGlyph overview";
-	private final static int MIN_WIDTH = 1500;
-	private final static int MIN_HEIGHT = 720;
+	private final static int MIN_WIDTH = 800;
+	private final static int MIN_HEIGHT = 256;
 	public final static int MAX_COUNT = 20;
 	
 	private GlyphPanel[] glyphPanels;
@@ -97,8 +97,12 @@ public class GlyphShower extends JFrame
 		}
 	}
 	
+	private int iteration = 0;
+	
 	public void setGlyphs(List<Glyph> glyphs, Evaluator evaluator)
 	{
+		setTitle("JGlyph overview population #" + (++iteration));
+		
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("Fitness for this set of glyphs:\t" );
