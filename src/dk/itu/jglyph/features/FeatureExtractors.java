@@ -36,27 +36,27 @@ public class FeatureExtractors
 		extractors = new ArrayList<>();
 		descriptions = new ArrayList<>();
 		
-//		addExtractor((Glyph g) -> minAngle(g), "Minimum angle.");
-//		addExtractor((Glyph g) -> avgAngle(g), "Average angle.");
-//		addExtractor((Glyph g) -> maxAngle(g), "Maximum angle.");
+		addExtractor((Glyph g) -> minAngle(g), "Minimum angle.");
+		addExtractor((Glyph g) -> avgAngle(g), "Average angle.");
+		addExtractor((Glyph g) -> maxAngle(g), "Maximum angle.");
 		
-//		addExtractor((Glyph g) -> minDistanceToCenter(g), "Minimum distance to center.");
-//		addExtractor((Glyph g) -> avgDistanceToCenter(g), "Average distance to center");
-//		addExtractor((Glyph g) -> maxDistanceToCenter(g), "Maximum distance to center.");
-//		
-//		addExtractor((Glyph g) -> minEdgeLength(g), "Minimum edge length.");
-//		addExtractor((Glyph g) -> avgEdgeLength(g), "Average edge length.");
-//		addExtractor((Glyph g) -> maxEdgeLength(g), "Maximum edge length.");
+		addExtractor((Glyph g) -> minDistanceToCenter(g), "Minimum distance to center.");
+		addExtractor((Glyph g) -> avgDistanceToCenter(g), "Average distance to center");
+		addExtractor((Glyph g) -> maxDistanceToCenter(g), "Maximum distance to center.");
 		
-//		addExtractor((Glyph g) -> avgStrokeEndsX(g), "Average stroke ends X.");
-//		addExtractor((Glyph g) -> avgStrokeEndsY(g), "Average stroke ends Y.");
+		addExtractor((Glyph g) -> minEdgeLength(g), "Minimum edge length.");
+		addExtractor((Glyph g) -> avgEdgeLength(g), "Average edge length.");
+		addExtractor((Glyph g) -> maxEdgeLength(g), "Maximum edge length.");
 		
-//		addExtractor((Glyph g) -> unitCount(g), "Unit count.");
+		addExtractor((Glyph g) -> avgStrokeEndsX(g), "Average stroke ends X.");
+		addExtractor((Glyph g) -> avgStrokeEndsY(g), "Average stroke ends Y.");
+		
+		addExtractor((Glyph g) -> unitCount(g), "Unit count.");
 		addExtractor((Glyph g) -> edgeCount(g), "Edge count.");
 
-//		addExtractor((Glyph g) -> strokeEstimate(g), "Stroke count estimate.");
+		addExtractor((Glyph g) -> strokeEstimate(g), "Stroke count estimate.");
 		
-//		addExtractor((Glyph g) -> dotCount(g), "Dot count.");
+		addExtractor((Glyph g) -> dotCount(g), "Dot count.");
 	}
 	
 	/**
