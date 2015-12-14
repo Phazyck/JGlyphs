@@ -6,12 +6,31 @@ import java.util.Queue;
 
 import dk.itu.jglyph.Glyph;
 
+/**
+ * A node in a relation graph used to make a user model.
+ */
 public class Node 
 {
+	/**
+	 * The glyph which is tied to the node.
+	 */
 	public final Glyph glyph;
+	
+	/**
+	 * The children of this node.
+	 */
 	private HashSet<Node> children;
+	
+	/**
+	 * The parents of this node.
+	 */
 	public HashSet<Node> parents;
 	
+	/**
+	 * Constructs a new Node from a given glyph.
+	 * 
+	 * @param glyph The glyph.
+	 */
 	public Node(Glyph glyph)
 	{
 		this.glyph = glyph;
@@ -19,6 +38,11 @@ public class Node
 		this.parents = new HashSet<>();
 	}
 	
+	/**
+	 * Adds a given node as a child to this node.
+	 * 
+	 * @param node The child-to-be.
+	 */
 	public void addChild(Node node)
 	{
 		if(node.hasChild(this))
@@ -30,6 +54,12 @@ public class Node
 		node.parents.add(this);
 	}
 	
+	/**
+	 * Determines if a given node is a child of this node.
+	 * 
+	 * @param node The node.
+	 * @return true if the node is a child of this node, false if not.
+	 */
 	public boolean hasChild(Node node)
 	{
 		for(Node child : children)
@@ -42,6 +72,11 @@ public class Node
 		return false;
 	}
 	
+	/**
+	 * Calculates the amount of unique children of this node.
+	 * 
+	 * @return The amount of unique children of this node.
+	 */
 	public int countUniqueChildren()
 	{
 		HashSet<Node> uniques = new HashSet<>();
@@ -67,6 +102,10 @@ public class Node
 		return(count);
 	}
 	
+	/**
+	 * Gets all the immediate children of this node.
+	 * @return The children.
+	 */
 	public Iterable<Node> getChildren() {
 		return children;
 	}

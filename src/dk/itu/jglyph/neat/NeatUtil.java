@@ -13,7 +13,7 @@ public class NeatUtil {
 	private final static String TRANSCRIBER_CLASS_KEY = "glyph.transcriber";
 	
 	public static Activator doEvolution(Model model, Properties properties) {
-		TrainingSet.model = model.clone();
+		TrainingSet.model = model.copy();
 		System.out.println("Current # of relations:\t" + model.relationCount());
 		
 		// Evolve new network
