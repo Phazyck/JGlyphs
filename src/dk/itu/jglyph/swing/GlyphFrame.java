@@ -36,25 +36,65 @@ public class GlyphFrame extends JFrame
 	 * Auto-generated serial version UID. 
 	 */
 	private static final long serialVersionUID = -3005890889450279723L;
-	
+
+	/**
+	 * The window title.
+	 */
 	private final static String FRAME_TITLE = "JGlyph";
+	
+	/**
+	 * The minimum width of the window.
+	 */
 	private final static int MIN_WIDTH = 320;
+	
+	/**
+	 * The minimum height of the window.
+	 */
 	private final static int MIN_HEIGHT = 380;
 	
+	/**
+	 * The glyph panel used to display the left choice.
+	 */
 	private GlyphPanel glyphPanelLeft;
+	/**
+	 * The glyph panel used to display the right choice.
+	 */
 	private GlyphPanel glyphPanelRight;
+	
+	/**
+	 * A glyph shower for displaying multiple glyphs for debugging purposes.
+	 */
 	private GlyphShower glyphShower;
 	
+	/**
+	 * The glyph filter.
+	 */
 	private Filter filter;
 	
+	/**
+	 * A collection of glyphs that have already been visited.
+	 */
 	private HashSet<Glyph> visited = new HashSet<>();
 	
+	/**
+	 * The glyph evolver.
+	 */
 	private GlyphEvolver evolver;
 
+	
+	/**
+	 * The amount of glyphs to be displayed in the glyph shower.
+	 */
 	private static final int MAX_TEST_COUNT = 20;
 	
+	/**
+	 * The population of glyphs.
+	 */
 	private ArrayList<Glyph> population;
 	
+	/**
+	 * Construcs a new glyph frame.
+	 */
 	public GlyphFrame()
 	{
 		filter = new Filter();
@@ -125,22 +165,23 @@ public class GlyphFrame extends JFrame
 			}
 		});
 		
-//		population = new ArrayList<Glyph>();
-//		
-//		for (int i = 0; i < MAX_TEST_COUNT; i++) {
-//			population.add(evolver.randomGlyph());
-//		}
 		population = evolver.getDistributedPopulation(MAX_TEST_COUNT);
 		glyphShower.setGlyphs(population, filter.getEvaluator());
-//		updatePopulation();
 		
 		updateGlyphs();
 		
 		
 	}
 	
+	/**
+	 * A variable that indicates whether or not things should be added to the user model (false),
+	 * or if the model should be improved by making new internal relations (true).
+	 */
 	boolean improveModel = false;
 	
+	/**
+	 * Updates all the choices of glyphs in the frame.
+	 */
 	private void updateGlyphs()
 	{
 		if(!tryImproveModel())
@@ -164,6 +205,11 @@ public class GlyphFrame extends JFrame
 		improveModel = !improveModel;
 	}
 	
+	/**
+	 * Performs an attempt to improve the model by adding further internal relations.
+	 * 
+	 * @return true if the attempt was successful, false if not.
+	 */
 	private boolean tryImproveModel()
 	{
 		if(!improveModel)
@@ -222,6 +268,11 @@ public class GlyphFrame extends JFrame
 		}
 	}
 	
+	/**
+	 * Finds a glyph that has already been presented to the user.
+	 * 
+	 * @return The glyph.
+	 */
 	private Glyph findOldGlyph()
 	{
 		// TODO Pick from model to improve new layout
@@ -230,6 +281,11 @@ public class GlyphFrame extends JFrame
 		return glyphs[Random.getInt(glyphs.length)];
 	}
 	
+	/**
+	 * Finds a glyph that has not been shown the the user before.
+	 * 
+	 * @return The glyph.
+	 */
 	private Glyph findNewGlyph()
 	{
 		Glyph glyph = null;
@@ -249,6 +305,9 @@ public class GlyphFrame extends JFrame
 		return(glyph);
 	}
 	
+	/**
+	 * Updates the current population of glyphs.
+	 */
 	private void updatePopulation() {
 		Evaluator evaluator = filter.getEvaluator(); 
 		
@@ -268,6 +327,9 @@ public class GlyphFrame extends JFrame
 		while (population.size() > MAX_TEST_COUNT) population.remove(MAX_TEST_COUNT);
 	}
 
+	/**
+	 * Picks the glyph on the left side.
+	 */
 	private void pickLeft()
 	{
 		Glyph better = glyphPanelLeft.getGlyph();
@@ -276,6 +338,9 @@ public class GlyphFrame extends JFrame
 		updateGlyphs();
 	}
 	
+	/**
+	 * Picks the glyph on the right side.
+	 */
 	private void pickRight()
 	{
 		Glyph better= glyphPanelRight.getGlyph();
@@ -284,6 +349,11 @@ public class GlyphFrame extends JFrame
 		updateGlyphs();
 	}
 	
+	/**
+	 * Adds left and right glyph panels to a container. 
+	 * 
+	 * @param container The container.
+	 */
 	private void addGlyphs(Container container)
 	{
 		GridLayout gridLayout = new GridLayout(1, 0);
@@ -317,7 +387,11 @@ public class GlyphFrame extends JFrame
 		container.add(glyphPanelRight);
 	}
 
-
+	/**
+	 * The application entry point.
+	 * 
+	 * @param args not used.
+	 */
 	public static void main(String[] args)
 	{
 
