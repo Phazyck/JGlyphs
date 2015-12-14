@@ -8,13 +8,29 @@ import dk.itu.jglyph.Edge;
 import dk.itu.jglyph.Glyph;
 import dk.itu.jglyph.Node;
 
+/**
+ * A utility class with methods and functions for extracting features of a glyph.
+ */
 public class FeatureExtractors 
 {
+	/**
+	 * The singleton instance.
+	 */
 	private static FeatureExtractors instance = null;
 	
+	/**
+	 * The list of available feature extractor functions.
+	 */
 	private List<IFeatureExtractor> extractors;
+	
+	/**
+	 * A list of descriptions of the available  feature extractors.
+	 */
 	private List<String> descriptions;
 	
+	/**
+	 * Private singleton constructor.
+	 */
 	private FeatureExtractors() 
 	{
 		extractors = new ArrayList<>();
@@ -43,17 +59,34 @@ public class FeatureExtractors
 //		addExtractor((Glyph g) -> dotCount(g), "Dot count.");
 	}
 	
+	/**
+	 * Adds a feature extractor to the list of available feature extractors.
+	 * 
+	 * @param extractor The feature extractor.
+	 * @param description A description of the feature extractor.
+	 */
 	private void addExtractor(IFeatureExtractor extractor, String description)
 	{
 		extractors.add(extractor);
 		descriptions.add(description);
 	}
 	
+	/**
+	 * Gets a feature extractor.
+	 * @param index The index of the feature extractor.
+	 * @return The feature extractor.
+	 */
 	public IFeatureExtractor getExtractor(int index)
 	{
 		return extractors.get(index);
 	}
 	
+	/**
+	 * Extracts all features of a glyph, using the currently available feature extractors.
+	 * 
+	 * @param glyph The glyph.
+	 * @return The features.
+	 */
 	public double[] extractFeatures(Glyph glyph)
 	{
 		int length = extractors.size();
@@ -69,20 +102,29 @@ public class FeatureExtractors
 		return(features);
 	}
 	
+	/**
+	 * A count of the amount of available feature extractors.
+	 * @return The total amount of available feature extractors. 
+	 */
 	public int totalExtractors() {
 		return extractors.size();
 	}
 	
+	/**
+	 * Gets the description of a feature extractor.
+	 * @param index The index of the feature extractor.
+	 * @return The description of the feature extractor.
+	 */
 	public String getDescription(int index)
 	{
 		return descriptions.get(index);
 	}
 	
-	public int count()
-	{
-		return extractors.size();
-	}
-	
+	/**
+	 * Gets the singleton instance of the feature extractors class.
+	 * 
+	 * @return The singleton instance.
+	 */
 	public static FeatureExtractors getInstance()
 	{
 		if(instance == null)
@@ -93,6 +135,11 @@ public class FeatureExtractors
 		return(instance);
 	}
 	
+	/**
+	 * Calculates the smallest angle found in the glyph.
+	 * @param glyph The glyph.
+	 * @return The smallest angle found in the glyph.
+	 */
 	public static double minAngle(Glyph glyph)
 	  {
 		  List<Double> angles = getAngles(glyph);
@@ -104,18 +151,27 @@ public class FeatureExtractors
 		  return min;
 	  }
 	  
+	/**
+	 * Calculates the average of all angles found in the glyph.
+	 * @param glyph The glyph.
+	 * @return The average of all angles found in the glyph.
+	 */
 	  public static double avgAngle(Glyph glyph)
 	  {
 		  List<Double> angles = getAngles(glyph);
 		  if (angles.size() == 0) return Math.PI;
 		  double sum = 0;
-//		  System.out.println(angles);
 		  for (Double d : angles) {
 			  sum += d;
 		  }
 		  return sum / angles.size();
 	  }
 	  
+		/**
+		 * Calculates the largest angle found in the glyph.
+		 * @param glyph The glyph.
+		 * @return The largest angle found in the glyph.
+		 */
 	  public static double maxAngle(Glyph glyph) 
 	  {
 		  List<Double> angles = getAngles(glyph);
@@ -127,6 +183,11 @@ public class FeatureExtractors
 		  return max;
 	  }
 	  
+	  /**
+	   * Finds all angles in a glyph.
+	   * @param g The glyph.
+	   * @return The angles.
+	   */
 	  private static List<Double> getAngles(Glyph g) {
 		  List<Double> result = new ArrayList<Double>();
 		  for (Node node : g.getNodes()) {
@@ -152,6 +213,13 @@ public class FeatureExtractors
 		  return result;
 	  }
 	  
+	  /**
+	   * Calculates the angle between three nodes.
+	   * @param center The center of the angle.
+	   * @param n1 The first leg of the angle.
+	   * @param n2 The second leg of the angle.
+	   * @return The angle.
+	   */
 	  private static Double getAngle(Node center, Node n1, Node n2) {
 		  double x1 = n1.x - center.x;
 		  double x2 = n2.x - center.x;
@@ -165,7 +233,12 @@ public class FeatureExtractors
 		  return Math.acos(dot/(l1*l2));
 	  }
 
-	/** Minimum distance from center for stroke start/end */
+	  /**
+	   * Calculates the minimum distance from center for stroke start/ends.
+	   * 
+	   * @param glyph The glyph.
+	   * @return The minimum distance from center for stroke start/ends.
+	   */
 	  public static double minDistanceToCenter(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
@@ -193,7 +266,12 @@ public class FeatureExtractors
 		  return(min);
 	  }
 
-	  /** Average distance from center for stroke start/end */
+	  /**
+	   * Calculates the average of all distances from center for stroke start/ends.
+	   * 
+	   * @param glyph The glyph.
+	   * @return The average of all distances from center for stroke start/ends.
+	   */
 	  public static double avgDistanceToCenter(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
@@ -218,7 +296,12 @@ public class FeatureExtractors
 		  return(average);
 	  }
 
-	  /** Maximum distance from center for stroke start/end */
+	  /**
+	   * Calculates the maximum distance from center for stroke start/ends.
+	   * 
+	   * @param glyph The glyph.
+	   * @return The maximum distance from center for stroke start/ends.
+	   */
 	  public static double maxDistanceToCenter(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
@@ -246,7 +329,11 @@ public class FeatureExtractors
 		  return(max);
 	  }
 
-	  /** Number of edges */
+	  /**
+	   * Calculates the amount of edges in a glyph.
+	   * @param glyph The glyph.
+	   * @return The amount of edges.
+	   */
 	  public static double edgeCount(Glyph glyph) 
 	  {
 		  int count = glyph.getEdges().size();
@@ -254,7 +341,11 @@ public class FeatureExtractors
 		  return(count);
 	  }
 
-	  /** Number of connected units */
+	  /**
+	   * Calculates the amount of connected units in a glyph.
+	   * @param glyph The glyph.
+	   * @return The amount of connected units in a glyph.
+	   */
 	  public static double unitCount(Glyph glyph) 
 	  {
 		  Iterable<Edge> edges = glyph.getEdges();
@@ -280,7 +371,11 @@ public class FeatureExtractors
 		  return sets.size();
 	  }
 
-	  /** An estimate for how many strokes would be needed to draw this */
+	  /**
+	   * Calculates an estimate for how many strokes would be needed to draw this glyph.
+	   * @param glyph The glyph.
+	   * @return The estimate for how many strokes would be needed to draw this glyph.
+	   */
 	  public static double strokeEstimate(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
@@ -291,7 +386,11 @@ public class FeatureExtractors
 		  return(estimate);
 	  }
 
-	  /** Average X for all edges */
+	  /**
+	   * Calculates the average X-coordinate for all edges in the glyph.
+	   * @param glyph The glyph.
+	   * @return The average X-coordinate for all edges in the glyph.
+	   */
 	  public static double avgX(Glyph glyph) 
 	  {
 		  double sum = 0;
@@ -303,7 +402,11 @@ public class FeatureExtractors
 		  return sum/(count*2);
 	  }
 
-	  /** Average Y for all edges */
+	  /**
+	   * Calculates the average Y-coordinate for all edges in the glyph.
+	   * @param glyph The glyph.
+	   * @return The average Y-coordinate for all edges in the glyph.
+	   */
 	  public static double avgY(Glyph glyph) 
 	  {
 		  double sum = 0;
@@ -315,7 +418,11 @@ public class FeatureExtractors
 		  return sum/(count*2);
 	  }
 
-	  /** Average X for stroke ends */
+	  /**
+	   * Calculates the average X-coordinate for all stroke ends in the glyph.
+	   * @param glyph The glyph.
+	   * @return The average X-coordinate for all stroke ends in the glyph.
+	   */
 	  public static double avgStrokeEndsX(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
@@ -340,7 +447,11 @@ public class FeatureExtractors
 		  return(average);
 	  }
 
-	  /** Average Y for stroke ends */
+	  /**
+	   * Calculates the average Y-coordinate for all stroke ends in the glyph.
+	   * @param glyph The glyph.
+	   * @return The average Y-coordinate for all stroke ends in the glyph.
+	   */
 	  public static double avgStrokeEndsY(Glyph glyph) 
 	  {
 		  List<Node> ends = glyph.getEndsOfStrokes();
@@ -365,7 +476,11 @@ public class FeatureExtractors
 		  return(average);
 	  }
 
-	  /** Minimum edge length */
+	  /**
+	   * Calculates the smallest length of all edges in the glyph.
+	   * @param glyph The glyph.
+	   * @return The smallest length of all edges in the glyph.
+	   */
 	  public static double minEdgeLength(Glyph glyph) 
 	  {
 		  double minLength = Double.MAX_VALUE;
@@ -376,7 +491,11 @@ public class FeatureExtractors
 		  return minLength;
 	  }
 
-	  /** Maximum edge length */
+	  /**
+	   * Calculates the largest length of all edges in the glyph.
+	   * @param glyph The glyph.
+	   * @return The largest length of all edges in the glyph.
+	   */
 	  public static double maxEdgeLength(Glyph glyph) 
 	  {
 		  double maxLength = Double.MIN_VALUE;
@@ -387,7 +506,11 @@ public class FeatureExtractors
 		  return maxLength;
 	  }
 
-	  /** Average edge length */
+	  /**
+	   * Calculates the average of the lengths of all edges in the glyph.
+	   * @param glyph The glyph.
+	   * @return The average of the lengths of all edges in the glyph.
+	   */
 	  public static double avgEdgeLength(Glyph glyph) 
 	  {
 		  double sum = 0;
@@ -404,7 +527,12 @@ public class FeatureExtractors
 		  return sum/count;
 	  }
 	  
-	  /** Amount of 'dots' */
+	  /**
+	   * Calculates the amount of "dots" in the glyph.
+	   * 
+	   * @param glyph The glyph.
+	   * @return The amount of dots in the glyph.
+	   */
 	  public static double dotCount(Glyph glyph) 
 	  {
 		  int sum = 0;
@@ -416,6 +544,12 @@ public class FeatureExtractors
 		  return sum;
 	  }
 	  
+	  /**
+	   * Calculates the length of an edge.
+	   * 
+	   * @param edge The edge.
+	   * @return The length of the edge.
+	   */
 	  private static double length(Edge edge) {
 		  double dx = edge.from.x-edge.to.x;
 		  double dy = edge.from.y-edge.to.y;
